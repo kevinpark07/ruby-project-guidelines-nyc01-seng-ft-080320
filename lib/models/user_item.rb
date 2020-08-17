@@ -1,0 +1,3 @@
+class UserItem
+
+end
