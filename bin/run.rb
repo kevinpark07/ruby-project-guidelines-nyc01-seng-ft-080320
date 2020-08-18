@@ -18,9 +18,28 @@ end
 def game
     puts "What is your name, young one?"
     name = gets.chomp
-    puts "Hi #{nane}! Interesting name. Let's get you set up to explore."
+    user = User.create(name: name)
+    puts "Hi #{user.name}! Interesting name. Let's get you set up to explore."
     puts "First, let's get you some items. We're a bit under-resourced, so you can only choose two."
     list_items
+    puts "Type the name of the item you wish to receive."
+    item1 = gets.chomp
+    user_item1 = user.pick_item(Item.find_by(name: item1))
+    puts "Great choice! Now choose one more."
+    item2 = gets.chomp
+    user_item2 = user.pick_item(Item.find_by(name: item1))
+
+
+end
+
+def list_items
+    count = 0
+    while count < Item.all.count
+    Item.all.each_with_index do |item, index|
+        puts "#{index +1}. #{item.name}: #{item.description}"
+    end
+end
+
 
     
 
