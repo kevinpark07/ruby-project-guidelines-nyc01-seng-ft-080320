@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
     end
 
     def pick_spell(spell)
-        UserSpell.create(user_id: self.id, item_id: item.id)
+        UserSpell.create(user_id: self.id, spell_id: spell.id)
     end
 
 end
