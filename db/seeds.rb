@@ -18,10 +18,10 @@ Item.create(name: "Marauder's Map", description: "Helpful Guide to Hogwarts.")
 Item.create(name: "Port Key", description: "Returns you to the Hidden Passage")
 
 
-accio = Spell.create(spell: "Accio-test", effect: "Summon items to your hand.")
-protego = Spell.create(spell: "Protego-test", effect: "Creates a limited protective shield around you.")
-incendio = Spell.create(spell: "Incendio-test", effect: "Fire can hurt. It can also help.")
-stupedy = Spell.create(spell: "Stupefy-test", effect: "Stun an object or being.")
+# accio = Spell.create(spell: "Accio-test", effect: "Summon items to your hand.")
+# protego = Spell.create(spell: "Protego-test", effect: "Creates a limited protective shield around you.")
+# incendio = Spell.create(spell: "Incendio-test", effect: "Fire can hurt. It can also help.")
+# stupedy = Spell.create(spell: "Stupefy-test", effect: "Stun an object or being.")
 
 
 spells = GetSpell.new.get_spells
