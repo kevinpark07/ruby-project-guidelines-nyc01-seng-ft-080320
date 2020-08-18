@@ -29,6 +29,8 @@ class Game < ActiveRecord::Base
         #user can access all the spells, technically speaking - what do we do?
         list_spells
         choose_spells
+        puts "Congratulations, it looks like you've chosen wisely. Dumbledore has a mission for you!"
+        start_scenario
     end
 
     def new_user
@@ -50,7 +52,7 @@ class Game < ActiveRecord::Base
         puts "Type the name of the item you wish to receive."
         item1 = gets.chomp
         self.user.pick_item(Item.find_by(name: item1))
-        binding.pry
+        # binding.pry
         puts "Great choice! Now choose one more."
         item2 = gets.chomp
         if self.user.items.include?(item1)
@@ -87,10 +89,13 @@ class Game < ActiveRecord::Base
             puts "You already know this spell. Please choose again:"
             list_spells
         else
-        self.user.pick_spell(Spell.find_by(spell: spell2))
+            self.user.pick_spell(Spell.find_by(spell: spell2))
+        end
     end
 
     def start_scenario
+        UserScenario.create(user: self.user, scenario: Scenario.create)
+        # user.scenario.start_scenario
     end
 
 end
