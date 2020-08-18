@@ -22,8 +22,8 @@ ActiveRecord::Schema.define(version: 7) do
   end
 
   create_table "spells", force: :cascade do |t|
-    t.string "name"
-    t.string "description"
+    t.string "spell"
+    t.string "effect"
   end
 
   create_table "useritems", force: :cascade do |t|
