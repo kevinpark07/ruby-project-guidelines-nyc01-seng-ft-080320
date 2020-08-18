@@ -21,5 +21,4 @@ spells = GetSpell.new.get_spells
 #     Spell.create(s)
 # end
 
-binding.pry
 
