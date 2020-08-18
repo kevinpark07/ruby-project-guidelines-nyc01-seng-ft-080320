@@ -15,10 +15,6 @@ class GetSpell
     
 end
 
-spells = GetSpell.new.get_spells
 
-# spells.each do |s|
-#     Spell.create(s)
-# end
 
 

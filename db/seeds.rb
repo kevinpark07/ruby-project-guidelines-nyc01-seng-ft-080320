@@ -14,7 +14,14 @@ map = Item.create(name: "Marauder's Map", description: "Helpful Guide to Hogwart
 whizbang = Item.create(name: "Whiz-Bangs", description: "Selection of distracting fireworks.")
 
 
-accio = Spell.create(name: "Accio", description: "Summon items to your hand.")
-protego = Spell.create(name: "Protego", description: "Creates a limited protective shield around you.")
-incendio = Spell.create(name: "Incendio", description: "Fire can hurt. It can also help.")
-stupedy = Spell.create(name: "Stupefy", description: "Stun an object or being.")
+accio = Spell.create(spell: "Accio-test", effect: "Summon items to your hand.")
+protego = Spell.create(spell: "Protego-test", effect: "Creates a limited protective shield around you.")
+incendio = Spell.create(spell: "Incendio-test", effect: "Fire can hurt. It can also help.")
+stupedy = Spell.create(spell: "Stupefy-test", effect: "Stun an object or being.")
+
+
+spells = GetSpell.new.get_spells
+
+spells.each do |s|
+    Spell.create(s)
+end

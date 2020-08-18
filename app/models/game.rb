@@ -49,17 +49,17 @@ class Game < ActiveRecord::Base
     
     def list_spells
         Spell.all.each_with_index do |spell, index|
-            puts "#{index +1}. #{spell.name}:    #{spell.description}"
+            puts "#{index +1}. #{spell.spell}:    #{spell.effect}"
         end
     end
     
     def choose_spells
         puts "Type the name of the spell you wish to learn."
         spell1 = gets.chomp
-        self.user.pick_spell(Spell.find_by(name: spell1))
+        self.user.pick_spell(Spell.find_by(spell: spell1))
         puts "Great choice! Now choose one more."
         spell2 = gets.chomp
-        self.user.pick_spell(Spell.find_by(name: spell2))
+        self.user.pick_spell(Spell.find_by(spell: spell2))
     end
     
 
