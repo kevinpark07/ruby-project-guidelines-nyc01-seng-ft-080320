@@ -10,10 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 8) do
-
-  create_table "games", force: :cascade do |t|
-  end
+ActiveRecord::Schema.define(version: 7) do
 
   create_table "items", force: :cascade do |t|
     t.string "name"
@@ -29,31 +26,29 @@ ActiveRecord::Schema.define(version: 8) do
     t.string "description"
   end
 
-  create_table "user_items", force: :cascade do |t|
+  create_table "useritems", force: :cascade do |t|
     t.integer "user_id"
     t.integer "item_id"
-    t.index ["item_id"], name: "index_user_items_on_item_id"
-    t.index ["user_id"], name: "index_user_items_on_user_id"
-  end
-
-  create_table "user_scenarios", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "scenario_id"
-    t.index ["scenario_id"], name: "index_user_scenarios_on_scenario_id"
-    t.index ["user_id"], name: "index_user_scenarios_on_user_id"
-  end
-
-  create_table "user_spells", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "spell_id"
-    t.index ["spell_id"], name: "index_user_spells_on_spell_id"
-    t.index ["user_id"], name: "index_user_spells_on_user_id"
+    t.index ["item_id"], name: "index_useritems_on_item_id"
+    t.index ["user_id"], name: "index_useritems_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
-    t.integer "game_id"
-    t.index ["game_id"], name: "index_users_on_game_id"
+  end
+
+  create_table "userscenarios", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "scenario_id"
+    t.index ["scenario_id"], name: "index_userscenarios_on_scenario_id"
+    t.index ["user_id"], name: "index_userscenarios_on_user_id"
+  end
+
+  create_table "userspells", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "spell_id"
+    t.index ["spell_id"], name: "index_userspells_on_spell_id"
+    t.index ["user_id"], name: "index_userspells_on_user_id"
   end
 
 end
