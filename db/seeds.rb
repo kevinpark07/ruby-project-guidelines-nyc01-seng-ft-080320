@@ -10,12 +10,12 @@ Scenario.destroy_all
 anson = User.create(name: "Anson")
 kevin = User.create(name: "Kevin")
 
-wand = Item.create(name: "A Plain Wand", description: "Channels magical energies")
-clock = Item.create(name: "Invisibility Clock", description: "Hide from your enemies!")
-sword = Item.create(name: "Slightly Dull Sword", description: "Stick 'em with the pointy end.")
-beer = Item.create(name: "Butter Beer", description: "You never know when you need to feel joy.")
-map = Item.create(name: "Marauder's Map", description: "Helpful Guide to Hogwarts.")
-whizbang = Item.create(name: "Whiz-Bangs", description: "Selection of distracting fireworks.")
+Item.create(name: "Nimbus 2000", description: "Fastest broom on the market")
+Item.create(name: "Invisibility Cloak", description: "Hide from your enemies!")
+Item.create(name: "Slightly Dull Sword", description: "Stick 'em with the pointy end.")
+Item.create(name: "Butter Beer", description: "You never know when you need to feel joy.")
+Item.create(name: "Marauder's Map", description: "Helpful Guide to Hogwarts.")
+Item.create(name: "Port Key", description: "Returns you to the Hidden Passage")
 
 
 accio = Spell.create(spell: "Accio-test", effect: "Summon items to your hand.")

@@ -48,10 +48,24 @@ class Game < ActiveRecord::Base
     end
     
     def list_spells
-        Spell.all.each_with_index do |spell, index|
-            puts "#{index +1}. #{spell.spell}:    #{spell.effect}"
+        spells = [
+            Spell.find_by(name: "Alohomora"),
+            Spell.find_by(name: "Expelliarmus"),
+            Spell.find_by(name: "Accio"),
+            Spell.find_by(name: "Lumos"),
+            Spell.find_by(name: "Reducto"),
+            Spell.find_by(name: "Obliviate")
+        ]
+
+        spells.each_with_index do |s,i|
+            #Better display mechanism?
+            puts "#{i +1}. #{s.spell}:    #{s.effect}"
         end
     end
+
+        # Spell.all.each_with_index do |spell, index|
+        #     puts "#{index +1}. #{spell.spell}:    #{spell.effect}"
+        # end
     
     def choose_spells
         puts "Type the name of the spell you wish to learn."
