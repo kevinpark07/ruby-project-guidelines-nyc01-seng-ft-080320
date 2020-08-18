@@ -1,3 +1,7 @@
+require_relative '../config/environment'
+
+require 'pry'
+
 User.destroy_all
 Item.destroy_all
 Spell.destroy_all
@@ -23,5 +27,8 @@ stupedy = Spell.create(spell: "Stupefy-test", effect: "Stun an object or being."
 spells = GetSpell.new.get_spells
 
 spells.each do |s|
-    Spell.create(s)
+    #binding.pry
+    spell_name = s["spell"]
+    effect_name = s["effect"]
+    Spell.create(spell: spell_name, effect: effect_name)
 end
