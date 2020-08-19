@@ -57,7 +57,7 @@ class Game < ActiveRecord::Base
 
     def choose_spells
         system("clear")
-        spells = %w[Alohomora Expelliarmus Accio Lumos Reducto Obliviate]
+        spells = %w[Aguamenti Confringo Confundus Imperio Expelliarmus Crucio]
         spell_choices = @@prompt.multi_select("Would you like to learn some spells?. Here, let me teach two", spells, min: 2, max: 2)
         spell_choices.count < 2 ? choose_spells : spell_choices
     end

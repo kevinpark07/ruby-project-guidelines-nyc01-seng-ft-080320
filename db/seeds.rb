@@ -10,6 +10,7 @@ UserItem.destroy_all
 UserSpell.destroy_all
 Character.destroy_all
 UserScenario.destroy_all
+Game.destroy_all
 
 
 Item.create(name: "Nimbus 2000", description: "Fastest broom on the market")
