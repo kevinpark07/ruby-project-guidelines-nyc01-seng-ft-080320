@@ -27,7 +27,7 @@ class Game < ActiveRecord::Base
         items = self.choose_items
         spells = self.choose_spells
         self.user.get_ready(items, spells)
-        result = @@prompt.select("Would you like to review your selections?", %w(Yes No))
+        result = @@prompt.select("Would you like to review your selections or continue?", %w(Review Continue))
 
         # list table of spells/items
         @@prompt.select("Congratulations, it looks like you've chosen wisely. Dumbledore has a mission for you!", %w(Ok!))
