@@ -45,7 +45,7 @@ characters.each do |c|
     Character.create(data)
 end
 
-test_scenario = Scenario.create(name: "Test Scenario")
-scenario_chars = Character.all.sample(6)
-scenario_chars.each {|char| char.update(scenario_id: test_scenario.id)}
+# test_scenario = Scenario.create(name: "Test Scenario")
+# scenario_chars = Character.all.sample(6)
+# scenario_chars.each {|char| char.update(scenario_id: test_scenario.id)}
 

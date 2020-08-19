@@ -27,12 +27,10 @@ class Game < ActiveRecord::Base
         spells = self.choose_spells
         self.user.get_ready(items, spells)
         result = @@prompt.select("Would you like to review your selections or continue?", %w(Review Continue))
-
         # list table of spells/items
         @@prompt.select("Congratulations, it looks like you've chosen wisely. Dumbledore has a mission for you!", %w(Ok!))
-        #choose scenario
-    
-        #start_scenario
+        choice = choose_scenario
+        start_scenario(choice)
     end
 
     def new_user
@@ -45,7 +43,7 @@ class Game < ActiveRecord::Base
 
     def choose_items
         system("clear")
-        items = ["Nimbus 2000", "Invisibility Cloak", "Slightly Dull Sword", "A Six-pack of Butter Beer", "Marauder's Map", "Port Key"]
+        items = ["Nimbus 2000", "Invisibility Cloak", "Slightly Dull Sword", "Butter Beer", "Marauder's Map", "Port Key"]
         item_choices = @@prompt.multi_select("Here are some useful items. Please choose two.", items, min: 2, max: 2)
         item_choices.count < 2 ? choose_items : item_choices
     end
@@ -54,16 +52,32 @@ class Game < ActiveRecord::Base
         system("clear")
         spells = %w[Alohomora Expelliarmus Accio Lumos Reducto Obliviate]
         spell_choices = @@prompt.multi_select("Would you like to learn some spells?. Here, let me teach two", spells, min: 2, max: 2)
-        spell_choices.count < 2 ? choose_spells : item_
+        spell_choices.count < 2 ? choose_spells : spell_choices
     end
 
     def choose_scenario
         system("clear")
-        scenarios = ["Join the Death Eaters!", "Fight the Death Eaters!", "Find the Sorceror's Stone"]
-        scenario_choice = @@prompt.select(scenarios)
+        scenarios = [
+            "Join the Death Eaters!", 
+            {name: "Fight the Death Eaters!", disabled: "(not ready yet!)"},
+            {name: "Find the Sorceror's Stone", disabled: "(not ready yet!)"}
+        ]
+        scenario_choice = @@prompt.select("Which challenge would you like to take?", scenarios)
+        scenario_choice
     end
 
-    def start_scenario
-
+    def start_scenario(choice)
+        if choice == "Join the Death Eaters!"
+            scenario = Scenario.create(name: "Death Eaters")
+            chars = Character.all.where("deathEater = ?", true).sample(6)
+            chars.each {|char| char.update(scenario_id: scenario.id)} 
+            user_scenario = UserScenario.create(user: self.user, scenario: scenario)
+            user_scenario.scenario.questions
+        end
     end
+
+
+
+
+
 end
