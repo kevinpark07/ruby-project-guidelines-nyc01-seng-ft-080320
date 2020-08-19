@@ -15,12 +15,11 @@ class Scenario < ActiveRecord::Base
         score = question_four(score)
         score = question_five(score)
         score = question_six(score)
-        binding.pry
         win?(score)
     end
 
     def question_one(score)
-        system("clear")
+        # system("clear")
         puts "As you enter the Death Eater office, you spot #{self.characters[0].name} in a dark corner."
         choice = %w[pure-blood half-blood muggle unkown]
         result = @@prompt.select("#{self.characters[0].name} asks: Hello #{self.users[0].name}! What is your blood type?", choice)
@@ -33,7 +32,7 @@ class Scenario < ActiveRecord::Base
     end
 
     def question_two(score)
-        system("clear")
+        # system("clear")
         puts "After appeasing #{self.characters[0].name}, you shiver as you pass by #{self.characters[1].name}."
         choice = self.users[0].spells.map {|spell| spell.spell_name}
         result = @@prompt.select("#{self.characters[1].name} asks: Hello #{self.users[0].name}! Which of the spells that you've learned would you use against an opponent?", choice)
@@ -48,7 +47,7 @@ class Scenario < ActiveRecord::Base
     end
 
     def question_three(score)
-        system("clear")
+        # system("clear")
         puts "#{self.characters[2].name} sees you walking down the hall and gives you a strange look."
         result = @@prompt.select("Hey kid! You got any beverages for me? All this Death Eating has made me mighty thirsty.", %w[Yes No])
         butter = Item.find_by_name("Butter Beer")
@@ -68,6 +67,7 @@ class Scenario < ActiveRecord::Base
     end
 
     def question_four(score)
+        # system("clear")
         choice = %w[Gryffindor Ravenclaw Slytherin Hufflepuff]
         result = @@prompt.select("#{self.characters[3].name} glares at you and asks: What house are you in anyway?", choice)
         if result == self.user.house && result == "Slytherin"
@@ -84,13 +84,36 @@ class Scenario < ActiveRecord::Base
     end
 
     def question_five(score)
+        # system("clear")
+        choice = %w[Voldemort Dumbledore Potter Grindelwald]
+        result = @@prompt.select("As you run to the bathroom to dry the sweat off your face, #{self.characters[4].name} sees you and grabs you by the collar and asks: Who do you think is the greatest wizard of all time?", choice)
+        if result == "Voldemort" || result == "Grindelwald"
+            puts "Hmmmmm... Excellent choice. But that was an easy question! Don't think I'm impressed."
+            score += 1
+        else
+            puts "WHAT!? You must be joking! Do you know where you are right now? Get out of my face!"
+            score -=1
+        end
+        score
     end
 
     def question_six(score)
+        # system("clear")
+        puts "As you exit the bathroom,  #{self.characters[5].name} is standing right ouside waiting for you." 
+        choice = %w[Accept Decline]
+        result = @@prompt.select("Hey kid, why don't you and I have a quick duel? It could be funnnn... Don't be scared.", choice)
+        if result == "Accept"
+            puts "You might not be as weak as I thought. Maybe you could be a Death Eater."
+            score +=1
+        else
+            puts "You're weak. I never expected much from you anyway."
+            score
+        end
+        score
     end
 
     def win?(score)
-        binding.pry
+        # binding.pry
         if score > 5
             you_won
         else
