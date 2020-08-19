@@ -38,8 +38,9 @@ ActiveRecord::Schema.define(version: 9) do
   end
 
   create_table "spells", force: :cascade do |t|
-    t.string "spell"
-    t.string "effect"
+    t.string "spell_name"
+    t.string "effect_name"
+    t.string "category"
   end
 
   create_table "user_items", force: :cascade do |t|
@@ -66,6 +67,8 @@ ActiveRecord::Schema.define(version: 9) do
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.integer "game_id"
+    t.string "bloodStatus"
+    t.string "house"
     t.index ["game_id"], name: "index_users_on_game_id"
   end
 

@@ -22,7 +22,7 @@ class Game < ActiveRecord::Base
     def new_game
         system("clear")
         self.new_user
-        puts "First, let's get you ready to face the Challenges."
+        puts "Thanks for the information! Now let's get you ready to face the Challenges."
         items = self.choose_items
         spells = self.choose_spells
         self.user.get_ready(items, spells)
@@ -38,7 +38,14 @@ class Game < ActiveRecord::Base
         name = @@prompt.ask("What is your name, young wizard?", echo: true)
         user = User.create(name: name)
         user.game = self
-        puts "Hi #{self.user.name}! Interesting name. Let's get you set up to explore."
+        puts "Hi #{self.user.name}! Interesting name. A few more questions..."
+        bloods = %w[pure-blood half-blood muggle unkown]
+        blood = @@prompt.select("What is your blood type?", bloods)
+        user.update(bloodStatus: blood)
+        houses = %w[Gryffindor Slytherin Ravenclaw Hufflepuff]
+        house = @@prompt.select("What house do you belong to?", houses)
+        user.update(house: house)
+
     end
 
     def choose_items
@@ -72,7 +79,7 @@ class Game < ActiveRecord::Base
             chars = Character.all.where("deathEater = ?", true).sample(6)
             chars.each {|char| char.update(scenario_id: scenario.id)} 
             user_scenario = UserScenario.create(user: self.user, scenario: scenario)
-            user_scenario.scenario.questions
+            user_scenario.scenario.ask_questions
         end
     end
 

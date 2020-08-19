@@ -3,6 +3,8 @@ class CreateUsersTable < ActiveRecord::Migration[6.0]
     create_table :users do |t|
       t.string :name
       t.belongs_to :game
+      t.string :bloodStatus
+      t.string :house
     end
   end
 end
