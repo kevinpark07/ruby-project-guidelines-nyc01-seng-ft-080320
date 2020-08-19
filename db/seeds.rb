@@ -10,8 +10,8 @@ UserItem.destroy_all
 UserSpell.destroy_all
 Character.destroy_all
 
-anson = User.create(name: "Anson")
-kevin = User.create(name: "Kevin")
+# anson = User.create(name: "Anson")
+# kevin = User.create(name: "Kevin")
 
 Item.create(name: "Nimbus 2000", description: "Fastest broom on the market")
 Item.create(name: "Invisibility Cloak", description: "Hide from your enemies!")
@@ -24,7 +24,6 @@ Item.create(name: "Port Key", description: "Returns you to the Hidden Passage")
 spells = GetSpell.new.get_spells
 
 spells.each do |s|
-    #binding.pry
     spell_name = s["spell"]
     effect_name = s["effect"]
     Spell.create(spell: spell_name, effect: effect_name)
@@ -45,3 +44,9 @@ characters.each do |c|
     }
     Character.create(data)
 end
+
+test_scenario = Scenario.create(name: "Test Scenario")
+scenario_chars = Character.all.sample(6)
+binding.pry
+scenario_chars.each {|char| char.update(scenario_id: test_scenario.id)}
+

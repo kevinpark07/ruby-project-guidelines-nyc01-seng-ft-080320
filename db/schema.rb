@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 9) do
 
   create_table "characters", force: :cascade do |t|
+    t.integer "scenario_id"
     t.string "name"
     t.string "house"
     t.string "school"
@@ -21,6 +22,7 @@ ActiveRecord::Schema.define(version: 9) do
     t.boolean "dumbledoresArmy"
     t.boolean "orderOfThePhoenix"
     t.boolean "ministryOfMagic"
+    t.index ["scenario_id"], name: "index_characters_on_scenario_id"
   end
 
   create_table "games", force: :cascade do |t|
