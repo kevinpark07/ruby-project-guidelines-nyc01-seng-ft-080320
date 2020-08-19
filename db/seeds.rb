@@ -47,6 +47,5 @@ end
 
 test_scenario = Scenario.create(name: "Test Scenario")
 scenario_chars = Character.all.sample(6)
-binding.pry
 scenario_chars.each {|char| char.update(scenario_id: test_scenario.id)}
 

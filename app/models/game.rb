@@ -30,8 +30,9 @@ class Game < ActiveRecord::Base
 
         # list table of spells/items
         @@prompt.select("Congratulations, it looks like you've chosen wisely. Dumbledore has a mission for you!", %w(Ok!))
+        #choose scenario
     
-        start_scenario
+        #start_scenario
     end
 
     def new_user
@@ -54,5 +55,15 @@ class Game < ActiveRecord::Base
         spells = %w[Alohomora Expelliarmus Accio Lumos Reducto Obliviate]
         spell_choices = @@prompt.multi_select("Would you like to learn some spells?. Here, let me teach two", spells, min: 2, max: 2)
         spell_choices.count < 2 ? choose_spells : item_
+    end
+
+    def choose_scenario
+        system("clear")
+        scenarios = ["Join the Death Eaters!", "Fight the Death Eaters!", "Find the Sorceror's Stone"]
+        scenario_choice = @@prompt.select(scenarios)
+    end
+
+    def start_scenario
+
     end
 end
