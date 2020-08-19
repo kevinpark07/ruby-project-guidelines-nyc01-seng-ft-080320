@@ -24,6 +24,9 @@ class Game < ActiveRecord::Base
         #need to check if User already has the item
         list_items
         choose_items
+        puts "Great choices. Let's choose a parter that will join you on your adventures"
+        list_characters
+        choose_characters
         puts "Fantastic #{self.user.name}! Now, we have time to learn two spells. Which would you like to learn?"
         #need to check if User already knows spell
         #user can access all the spells, technically speaking - what do we do?
@@ -93,9 +96,33 @@ class Game < ActiveRecord::Base
         end
     end
 
-    def start_scenario
-        UserScenario.create(user: self.user, scenario: Scenario.create)
-        # user.scenario.start_scenario
+    def list_characters
+        characters = [
+            Character.find_by(name: "Harry Potter"),
+            Character.find_by(name: "Hermione Granger"),
+            Character.find_by(name: "Ronald Weasley"),
+            Character.find_by(name: "Luna Lovegood"),
+            Character.find_by(name: "Neville Longbottom"),
+            Character.find_by(name: "Ginevra Weasley")
+        ]
+
+        characters.each_with_index do |c,i|
+            #Better display mechanism?
+            puts "#{i +1}. #{c.name}: #{c.house}, #{c.bloodStatus}"
+        end
     end
+
+    def choose_characters
+        puts "Type the name of the partner who will join you on your adventure."
+        name1 = gets.chomp
+        self.user.pick_character(Character.find_by(name: name1))
+        puts "Great choice!"
+    end
+
+
+    # def start_scenario
+    #     UserScenario.create(user: self.user, scenario: Scenario.create)
+    #     user.scenario.start_scenario
+    # end
 
 end

@@ -1,5 +1,5 @@
-class UserScenario < ActiveRecord::Base
-    belongs_to :user
-    belongs_to :scenario
+# class UserScenario < ActiveRecord::Base
+#     belongs_to :user
+#     belongs_to :scenario
 
-end
+# end

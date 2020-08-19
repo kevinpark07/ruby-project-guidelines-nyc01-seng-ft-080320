@@ -5,7 +5,7 @@ require 'pry'
 User.destroy_all
 Item.destroy_all
 Spell.destroy_all
-Scenario.destroy_all
+# Scenario.destroy_all
 
 anson = User.create(name: "Anson")
 kevin = User.create(name: "Kevin")
@@ -18,10 +18,15 @@ Item.create(name: "Marauder's Map", description: "Helpful Guide to Hogwarts.")
 Item.create(name: "Port Key", description: "Returns you to the Hidden Passage")
 
 
-# accio = Spell.create(spell: "Accio-test", effect: "Summon items to your hand.")
-# protego = Spell.create(spell: "Protego-test", effect: "Creates a limited protective shield around you.")
-# incendio = Spell.create(spell: "Incendio-test", effect: "Fire can hurt. It can also help.")
-# stupedy = Spell.create(spell: "Stupefy-test", effect: "Stun an object or being.")
+characters = GetCharacter.new.get_characters
+
+characters.each do |c|
+    character_name = c["name"]
+    character_house = c["house"]
+    character_bloodStatus = c["bloodStatus"]
+    Character.create(name: character_name, house: character_house, bloodStatus: character_bloodStatus)
+end
+
 
 
 spells = GetSpell.new.get_spells

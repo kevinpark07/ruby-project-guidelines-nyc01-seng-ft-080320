@@ -12,6 +12,12 @@
 
 ActiveRecord::Schema.define(version: 8) do
 
+  create_table "characters", force: :cascade do |t|
+    t.string "name"
+    t.string "house"
+    t.string "bloodStatus"
+  end
+
   create_table "games", force: :cascade do |t|
   end
 
@@ -20,13 +26,16 @@ ActiveRecord::Schema.define(version: 8) do
     t.string "description"
   end
 
-  create_table "scenarios", force: :cascade do |t|
-    t.string "name"
-  end
-
   create_table "spells", force: :cascade do |t|
     t.string "spell"
     t.string "effect"
+  end
+
+  create_table "user_characters", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "character_id"
+    t.index ["character_id"], name: "index_user_characters_on_character_id"
+    t.index ["user_id"], name: "index_user_characters_on_user_id"
   end
 
   create_table "user_items", force: :cascade do |t|
@@ -34,13 +43,6 @@ ActiveRecord::Schema.define(version: 8) do
     t.integer "item_id"
     t.index ["item_id"], name: "index_user_items_on_item_id"
     t.index ["user_id"], name: "index_user_items_on_user_id"
-  end
-
-  create_table "user_scenarios", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "scenario_id"
-    t.index ["scenario_id"], name: "index_user_scenarios_on_scenario_id"
-    t.index ["user_id"], name: "index_user_scenarios_on_user_id"
   end
 
   create_table "user_spells", force: :cascade do |t|

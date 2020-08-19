@@ -15,6 +15,10 @@ class User < ActiveRecord::Base
         UserSpell.create(user_id: self.id, spell_id: spell.id)
     end
 
+    def pick_character(character)
+        UserCharacter.create(user_id: self.id, character_id: character.id)
+    end
+
     def options
         self.items.each_with_index do |item, index|
             puts "#{index +1}. #{item.name}: #{item.description}"
