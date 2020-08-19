@@ -6,6 +6,8 @@ User.destroy_all
 Item.destroy_all
 Spell.destroy_all
 Scenario.destroy_all
+UserItem.destroy_all
+UserSpell.destroy_all
 
 anson = User.create(name: "Anson")
 kevin = User.create(name: "Kevin")

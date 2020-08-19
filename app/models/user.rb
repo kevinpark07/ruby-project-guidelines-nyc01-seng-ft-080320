@@ -25,4 +25,11 @@ class User < ActiveRecord::Base
         end
     end
 
+    def get_ready(items, spells)
+        items.each {|item| UserItem.create(user_id: self.id, item_id: Item.find_by_name(item).id)}
+        binding.pry
+        spells.each {|spell| UserSpell.create(user_id: self.id, spell_id: Spell.find_by_spell(spell).id)}
+    end
+
+
 end

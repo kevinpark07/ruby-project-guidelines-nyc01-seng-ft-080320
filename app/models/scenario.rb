@@ -63,10 +63,10 @@ class Scenario < ActiveRecord::Base
         us = UserScenario.all.where("scenario_id = ?", self.id).first
         us.user.options
         input = gets.chomp
-            if input != "Nimbus 2000" || "accio"
+            if input != "Nimbus 2000" || input != "accio"
                 puts "Nothing happened. The keys continue to fly and you're stuck on the ground"
                 event4
-            elsif input == "Nimbus 2000" || "accio"
+            elsif input == "Nimbus 2000" || input == "accio"
                 puts "You got the key! You use the key to open the door and you find yourself in another corridor with a goblin at the end standing in front of the door. He looks tired and will not let you pass! He is a stubborn one! What item can you give him?"
                 event5
             end
