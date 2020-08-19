@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 8) do
+ActiveRecord::Schema.define(version: 9) do
+
+  create_table "characters", force: :cascade do |t|
+    t.string "name"
+    t.string "house"
+    t.string "school"
+    t.string "bloodStatus"
+    t.boolean "deathEater"
+    t.boolean "dumbledoresArmy"
+    t.boolean "orderOfThePhoenix"
+    t.boolean "ministryOfMagic"
+  end
 
   create_table "games", force: :cascade do |t|
   end

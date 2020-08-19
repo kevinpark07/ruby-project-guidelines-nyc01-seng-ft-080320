@@ -8,6 +8,7 @@ Spell.destroy_all
 Scenario.destroy_all
 UserItem.destroy_all
 UserSpell.destroy_all
+Character.destroy_all
 
 anson = User.create(name: "Anson")
 kevin = User.create(name: "Kevin")
@@ -20,12 +21,6 @@ Item.create(name: "Marauder's Map", description: "Helpful Guide to Hogwarts.")
 Item.create(name: "Port Key", description: "Returns you to the Hidden Passage")
 
 
-# accio = Spell.create(spell: "Accio-test", effect: "Summon items to your hand.")
-# protego = Spell.create(spell: "Protego-test", effect: "Creates a limited protective shield around you.")
-# incendio = Spell.create(spell: "Incendio-test", effect: "Fire can hurt. It can also help.")
-# stupedy = Spell.create(spell: "Stupefy-test", effect: "Stun an object or being.")
-
-
 spells = GetSpell.new.get_spells
 
 spells.each do |s|
@@ -33,4 +28,20 @@ spells.each do |s|
     spell_name = s["spell"]
     effect_name = s["effect"]
     Spell.create(spell: spell_name, effect: effect_name)
+end
+
+
+characters = GetCharacter.new.get_characters
+
+characters.each do |c|
+    data = {
+        "name" => c["name"],
+        "house" => c["house"],
+        "bloodStatus" => c["bloodStatus"],
+        "deathEater" => c["deathEater"],
+        "dumbledoresArmy" => c["dumbledoresArmy"],
+        "orderOfThePhoenix" => c["orderOfThePhoenix"],
+        "ministryOfMagic" => c["ministryOfMagic"]
+    }
+    Character.create(data)
 end
