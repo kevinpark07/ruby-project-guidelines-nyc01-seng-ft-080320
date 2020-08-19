@@ -28,7 +28,7 @@ class Game < ActiveRecord::Base
         self.user.get_ready(items, spells)
         result = @@prompt.select("Would you like to review your selections or continue?", %w(Review Continue))
         # list table of spells/items
-        @@prompt.select("Congratulations, it looks like you've chosen wisely. Dumbledore has a mission for you!", %w(Ok!))
+        @@prompt.select("Congratulations, it looks like you've chosen wisely. Time to choose your objective!", %w(Ok!))
         choice = choose_scenario
         start_scenario(choice)
     end
