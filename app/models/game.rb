@@ -1,6 +1,9 @@
 require 'pry'
 require 'tty-prompt'
-# require 'tty-font'
+require 'tty-box'
+require 'tty-font'
+require 'pastel'
+require 'tty-color'
 
 
 
@@ -13,17 +16,18 @@ class Game < ActiveRecord::Base
 
     def start
         system("clear")
-        # puts @@pastel.red(@@font.write("Hogwarts School of Witchcraft & Wizardry"))
-        puts "Welcome to Hogwarts! My name is Argus Filch. There have been many curious and dangerous occurences in these halls."
+        box = TTY::Box.frame(width: 30, height: 10, border: :thick, align: :center, padding: 1) do
+        @@pastel.green("Welcome to Hogwarts! My name is Argus Filch. There have been many curious and dangerous occurences in these halls.")
+        end
+        print box
         user = start_menu(self)
-        binding.pry
         puts "Welcome #{self.user.name}! Let's explore."
         navigation_menu
     end
 
     def start_menu(game)
         #@@font name
-        @@prompt.select("Welcome to the start menu.", per_page: 3) do |menu|
+        @@prompt.select("Please Log into the system:", per_page: 3) do |menu|
             menu.choice "Create a New Log-in", -> { User.new_user(game) }
             menu.choice "Log-in", -> { User.existing_user(game) }
             menu.choice "Exit", -> { exit }
