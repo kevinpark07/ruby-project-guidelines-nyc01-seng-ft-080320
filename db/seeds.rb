@@ -14,8 +14,8 @@ Game.destroy_all
 
 User.create(name: "Test", username: "Test1", password: "test")
 
-Item.create(name: "Nimbus 2000", description: "Fastest broom on the market")
-Item.create(name: "Invisibility Cloak", description: "Hide from your enemies!")
+broom = Item.create(name: "Nimbus 2000", description: "Fastest broom on the market")
+cloak = Item.create(name: "Invisibility Cloak", description: "Hide from your enemies!")
 Item.create(name: "Slightly Dull Sword", description: "Stick 'em with the pointy end.")
 Item.create(name: "Butter Beer", description: "You never know when you need to feel joy.")
 Item.create(name: "Marauder's Map", description: "Helpful Guide to Hogwarts.")

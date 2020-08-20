@@ -118,6 +118,7 @@ class Scenario < ActiveRecord::Base
         else
             you_lost
         end
+        self.user.game.navigation_menu
     end
 
     def you_won

@@ -3,3 +3,4 @@ class UserItem < ActiveRecord::Base
     belongs_to :item
 
 end
+

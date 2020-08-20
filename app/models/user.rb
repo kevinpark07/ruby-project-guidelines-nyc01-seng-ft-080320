@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
     has_many :user_scenarios
     has_many :user_spells
     has_many :user_items
+
     has_many :scenarios, through: :user_scenarios
     has_many :spells, through: :user_spells
     has_many :items, through: :user_items
@@ -30,6 +31,7 @@ class User < ActiveRecord::Base
             puts "#{username} not found"
             return false
         end
+        exist_user
     end
 
 
@@ -37,11 +39,9 @@ class User < ActiveRecord::Base
         system("clear")
         username = self.create_username
         password = self.create_password
-        game = Game.last
         user = User.create(username: username, password: password)
-        game.update(user: user)
-        binding.pry
         user.user_info
+        user
     end
 
     def self.create_username
@@ -87,24 +87,6 @@ class User < ActiveRecord::Base
         name = @@prompt.ask("What is your name, young wizard?", echo: true)
     end
 
-
-
-
-
-
-
-
-        # user = User.all.find_by(username: username, password: password)
-        # if user == nil
-        #     puts "Sorry, your name and/or password was not found. Please try again."
-        #     self.existing_user 
-        # else
-        #     user.game = self
-        # end
-        # self.navigation_menu
-
-
-
     def spell_names
         self.spells.map {|spell| spell.spell_name}
     end
@@ -113,10 +95,39 @@ class User < ActiveRecord::Base
         self.items.map {|item| item.name}
     end
 
-    def get_ready(items, spells)
-        items.each {|item| UserItem.create(user_id: self.id, item_id: Item.find_by_name(item).id)}
-        spells.each {|spell| UserSpell.create(user_id: self.id, spell_id: Spell.find_by(spell_name: spell).id)}
+
+    def change_items
+        system("clear")
+        UserItem.all.where("user_id = ?", self.id).destroy_all
+        items = ["Nimbus 2000", "Invisibility Cloak", "Slightly Dull Sword", "Butter Beer", "Marauder's Map", "Port Key"]
+        item_choices = @@prompt.multi_select("Here are some useful items. Please choose two.", items, min: 2, max: 2)
+        item_choices.count < 2 ? change_items : item_choices
+        get_ready_items(item_choices)
     end
 
+    def change_spells
+        system("clear")
+        UserSpell.all.where("user_id = ?", self.id).destroy_all
+        spells = %w[Aguamenti Confringo Confundus Imperio Expelliarmus Crucio]
+        spell_choices = @@prompt.multi_select("Would you like to learn some spells?. Here, let me teach two", spells, min: 2, max: 2)
+        spell_choices.count < 2 ? change_spells : spell_choices
+        get_ready_spells(spell_choices)
+    end
+
+    def get_ready_items(item_names)
+        item_one_id = Item.find_by(name: item_names[0]).id
+        item_two_id = Item.find_by(name: item_names[1]).id
+        UserItem.create(user_id: self.id, item_id: item_one_id)
+        UserItem.create(user_id: self.id, item_id: item_two_id)
+        self.game.navigation_menu
+    end
+
+    def get_ready_spells(spell_names)
+        spell_one_id = Spell.find_by(spell_name: spell_names[0]).id
+        spell_two_id = Spell.find_by(spell_name: spell_names[1]).id
+        UserSpell.create(user_id: self.id, spell_id: spell_one_id)
+        UserSpell.create(user_id: self.id, spell_id: spell_two_id)
+        self.game.navigation_menu
+    end
 
 end
