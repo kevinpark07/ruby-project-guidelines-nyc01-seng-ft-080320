@@ -12,6 +12,7 @@ Character.destroy_all
 UserScenario.destroy_all
 Game.destroy_all
 
+User.create(name: "Test", username: "Test1", password: "test")
 
 Item.create(name: "Nimbus 2000", description: "Fastest broom on the market")
 Item.create(name: "Invisibility Cloak", description: "Hide from your enemies!")

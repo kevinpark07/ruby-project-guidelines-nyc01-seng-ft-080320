@@ -1,5 +1,6 @@
 require 'pry'
 require 'tty-prompt'
+# require 'tty-font'
 
 
 
@@ -8,23 +9,34 @@ class Game < ActiveRecord::Base
 
     @@prompt = TTY::Prompt.new(active_color: :blue)
     @@pastel = Pastel.new
-    #@@font = TTY::Font.new(:starwars)
+    # @@font = TTY::Font.new(:starwars)
 
     def start
         system("clear")
-        #puts @@pastel.red(@@font.write("Hogwarts School of Witchcraft & Wizardry"))
+        # puts @@pastel.red(@@font.write("Hogwarts School of Witchcraft & Wizardry"))
+        start_menu
         puts "Welcome to Hogwarts! My name is Argus Filch. There have been many curious and dangerous occurences in these halls."
-        existing = @@prompt.select("Have you played with us before?", %w(Yes No))
-        if existing == "Yes" ? self.existing_user : self.new_user
+        # existing = @@prompt.select("Have you played with us before?", %w(Yes No))
+        # if existing == "Yes" ? self.existing_user : self.new_user
         puts "Welcome #{self.user.name}! Let's explore"
         # self.navigation_menu
         self.new_game
-        end
     end
 
+    def start_menu
+        #@@font name
+        @@prompt.select("Welcome to the start menu.", per_page: 3) do |menu|
+            menu.choice "Create a New Log-in", -> { new_user }
+            menu.choice "Log-in", -> { existing_user }
+            menu.choice "Exit", -> { exit }
+        end
+    end
+    
+
+    
     def navigation_menu
         #@@font name
-        @@prompt.select("Welcome, what do you want to do?", per_page: 6) do |menu|
+        @@prompt.select(@@pastel.green("Welcome, what do you want to do?"), per_page: 6) do |menu|
             menu.choice "View Current Items", -> { view_items }
             menu.choice "Change Current Items", -> { change_items }
             menu.choice "View Current Spells", -> { view_spells }
@@ -87,24 +99,23 @@ class Game < ActiveRecord::Base
 
 
     def existing_user
-        name = @@prompt.ask("Please enter you name:")
-        password = @@prompt.ask("Please enter your password:")
-        user = User.all.find_by(name: name, password: password)
+        username = @@prompt.ask("Please enter you username >>")
+        password = @@prompt.mask("Please enter your password >>")
+        user = User.all.find_by(username: username, password: password)
         if user == nil
             puts "Sorry, your name and/or password was not found. Please try again."
-            self.start 
+            self.existing_user 
         else
             user.game = self
         end
-        user
+        self.navigation_menu
     end
 
-    def new_user
+    def new_user #updated
         system("clear")
-        name = @@prompt.ask("What is your name, young wizard?", echo: true)
-        password = @@prompt.ask("Please enter a password:")
-        user = User.create(name: name, password: password)
-        user.game = self
+        create_new_user
+        name = @@prompt.ask("What is your name, young wizard? >>", echo: true)
+        self.user.name = name
         puts "Hi #{self.user.name}! Interesting name. A few more questions..."
         bloods = %w[pure-blood half-blood muggle unkown]
         blood = @@prompt.select("What is your blood type?", bloods)
@@ -114,6 +125,29 @@ class Game < ActiveRecord::Base
         user.update(house: house)
         user
     end
+
+    def create_new_user #new
+        # system("clear")
+        create_username
+        password = @@prompt.mask("Please enter a Password:")
+        password_check = @@prompt.mask("Please Re-enter Your Password:")
+        if password_check != password
+            puts "We're sorry, but you passwords don't seem to match. Please try again"
+            password = @@prompt.mask("Please enter a Password:")
+            password_check = @@prompt.mask("Please Re-enter Your Password:")
+            user.update(password: password_check)
+        else
+            user.update(password: password_check)
+        end
+        binding.pry
+    end
+
+    def create_username
+        username = @@prompt.ask("Please enter a Username >>")
+        user = User.create(username: username)
+        user.game = self
+    end
+
 
     
     def new_game
