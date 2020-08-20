@@ -113,7 +113,6 @@ class Scenario < ActiveRecord::Base
     end
 
     def win?(score)
-        # binding.pry
         if score > 4
             you_won
         else
