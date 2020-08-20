@@ -133,13 +133,12 @@ class Game < ActiveRecord::Base
         password_check = @@prompt.mask("Please Re-enter Your Password:")
         if password_check != password
             puts "We're sorry, but you passwords don't seem to match. Please try again"
-            password = @@prompt.mask("Please enter a Password:")
-            password_check = @@prompt.mask("Please Re-enter Your Password:")
+            password = @@prompt.ask("Please enter a Password:")
+            password_check = @@prompt.ask("Please Re-enter Your Password:")
             user.update(password: password_check)
         else
             user.update(password: password_check)
         end
-        binding.pry
     end
 
     def create_username
@@ -158,9 +157,9 @@ class Game < ActiveRecord::Base
         self.navigation_menu
         # result = @@prompt.select("Would you like to review your selections or continue?", %w(Review Continue))
         # list table of spells/items
-        @@prompt.select("Congratulations, it looks like you've chosen wisely. Time to choose your objective!", %w(Ok!))
-        choice = choose_scenario
-        start_scenario(choice)
+        # @@prompt.select("Congratulations, it looks like you've chosen wisely. Time to choose your objective!", %w(Ok!))
+        # choice = choose_scenario
+        # start_scenario(choice)
     end
 
 
@@ -189,7 +188,8 @@ class Game < ActiveRecord::Base
             {name: "Find the Sorceror's Stone", disabled: "(not ready yet!)"}
         ]
         scenario_choice = @@prompt.select("Which challenge would you like to take?", scenarios)
-        scenario_choice
+        choice = scenario_choice
+        start_scenario(choice)
     end
 
     def start_scenario(choice)
