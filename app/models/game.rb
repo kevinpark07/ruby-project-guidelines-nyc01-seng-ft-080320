@@ -15,17 +15,17 @@ class Game < ActiveRecord::Base
         system("clear")
         # puts @@pastel.red(@@font.write("Hogwarts School of Witchcraft & Wizardry"))
         puts "Welcome to Hogwarts! My name is Argus Filch. There have been many curious and dangerous occurences in these halls."
-        user = start_menu
-        self.update(user: user)
+        user = start_menu(self)
+        binding.pry
         puts "Welcome #{self.user.name}! Let's explore."
         navigation_menu
     end
 
-    def start_menu
+    def start_menu(game)
         #@@font name
         @@prompt.select("Welcome to the start menu.", per_page: 3) do |menu|
-            menu.choice "Create a New Log-in", -> { User.new_user }
-            menu.choice "Log-in", -> { User.existing_user }
+            menu.choice "Create a New Log-in", -> { User.new_user(game) }
+            menu.choice "Log-in", -> { User.existing_user(game) }
             menu.choice "Exit", -> { exit }
         end
     end

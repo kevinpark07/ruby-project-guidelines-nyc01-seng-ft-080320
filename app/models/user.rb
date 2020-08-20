@@ -12,10 +12,10 @@ class User < ActiveRecord::Base
 
     @@prompt = TTY::Prompt.new(active_color: :blue)
 
-    def self.existing_user
+    def self.existing_user(game)
         username = @@prompt.ask("Please enter you username:")
         exist_user = User.find_by(username: username)
-        if exist_user
+        if exist_user != nil
             password = @@prompt.mask("Please enter your password:")
             count = 0
             while exist_user.password != password
@@ -24,22 +24,24 @@ class User < ActiveRecord::Base
                 count += 1
                 if count == 2
                     puts "Sorry, account has been locked."
-                    return false
+                    start_menu(game)
                 end
             end
         else
             puts "#{username} not found"
-            return false
+            #game.start_menu(game)
         end
+        game.update(user: exist_user)
         exist_user
     end
 
 
-    def self.new_user
+    def self.new_user(game)
         system("clear")
         username = self.create_username
         password = self.create_password
         user = User.create(username: username, password: password)
+        game.update(user: user)
         user.user_info
         user
     end
