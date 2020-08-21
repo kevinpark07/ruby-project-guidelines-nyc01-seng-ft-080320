@@ -169,7 +169,7 @@ class Scenario < ActiveRecord::Base
         result = @@prompt.select(@@pastel.bold.underline.magenta("Hey kid, why don't you and I have a quick duel? \nIt could be funnnn... Don't be scared."), choice)
         if result == "Accept"
             message = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
-            @@pastel.bold.blue("You might not be as weak as I thought. Maybe you would make a Death Eater.")
+            @@pastel.bold.blue("You might not be as weak as I thought. Maybe you would make a good Death Eater.")
             end
             print message
             sleep(4)
