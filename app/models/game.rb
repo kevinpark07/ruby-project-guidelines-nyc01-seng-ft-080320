@@ -3,34 +3,38 @@ require 'tty-prompt'
 require 'tty-box'
 require 'tty-font'
 require 'pastel'
-require 'tty-color'
+
 
 
 
 class Game < ActiveRecord::Base
     has_one :user
 
-    @@prompt = TTY::Prompt.new(active_color: :blue)
+    @@prompt = TTY::Prompt.new(active_color: :green)
     @@pastel = Pastel.new
     # @@font = TTY::Font.new(:starwars)
 
     def start
         system("clear")
-        box = TTY::Box.frame(width: 30, height: 10, border: :thick, align: :center, padding: 1) do
-        @@pastel.green("Welcome to Hogwarts! My name is Argus Filch. There have been many curious and dangerous occurences in these halls.")
+        # banner
+        box = TTY::Box.frame(width: 50, height: 8, border: :thick, align: :center, padding: 1) do
+        @@pastel.bold.green("Hello, I am Professor Minerva McGonagall. There have been many curious and dangerous occurences in these halls.")
         end
         print box
         user = start_menu(self)
-        puts "Welcome #{self.user.name}! Let's explore."
+        message = TTY::Box.frame(width: 30, height: 5, border: :thick, align: :center, padding: 1) do 
+        @@pastel.bold.white("Welcome #{self.user.name}! Let's explore.")
+        end
+        print message
         navigation_menu
     end
 
     def start_menu(game)
         #@@font name
-        @@prompt.select("Please Log into the system:", per_page: 3) do |menu|
-            menu.choice "Create a New Log-in", -> { User.new_user(game) }
-            menu.choice "Log-in", -> { User.existing_user(game) }
-            menu.choice "Exit", -> { exit }
+        @@prompt.select(@@pastel.bold.on_blue("Please Log into the system:"), per_page: 3) do |menu|
+            menu.choice @@pastel.green("Create a New Log-in"), -> { User.new_user(game) }
+            menu.choice @@pastel.cyan("Log-in"), -> { User.existing_user(game) }
+            menu.choice @@pastel.magenta("Exit"), -> { exit }
         end
     end
 
@@ -38,13 +42,13 @@ class Game < ActiveRecord::Base
     
     def navigation_menu
         #@@font name
-        @@prompt.select(@@pastel.green("Welcome, what do you want to do?")) do |menu|
-            menu.choice "View Current Items", -> { view_items }
-            menu.choice "View Current Spells", -> { view_spells }
-            menu.choice "Add/Change Items", -> { update_items }
-            menu.choice "Add/Change Spells", -> { update_spells }
-            menu.choice "Choose Scenario", -> { choose_scenario }
-            menu.choice "Exit", -> { exit }
+        @@prompt.select(@@pastel.bold.underline.white("What do you want to do?")) do |menu|
+            menu.choice @@pastel.yellow("View Current Items"), -> { view_items }
+            menu.choice @@pastel.cyan("View Current Spells"), -> { view_spells }
+            menu.choice @@pastel.yellow("Add/Change Items"), -> { update_items }
+            menu.choice @@pastel.cyan("Add/Change Spells"), -> { update_spells }
+            menu.choice @@pastel.green("Choose Scenario"), -> { choose_scenario }
+            menu.choice @@pastel.red("Exit"), -> { exit }
         end
     end
 
@@ -52,42 +56,54 @@ class Game < ActiveRecord::Base
         # item_box = TTY::Box.frame
         #Show box full of items or box with msg saying "Sorry!"
         if  User.all.select {|user| user.game_id == self.id}.first.user_items == []
-            puts "Sorry, you have no items. Go back to add items/spells."
+        message = TTY::Box.frame(width: 30, height: 3, border: :thick, align: :center) do  
+        @@pastel.bold.yellow("Sorry, you have no items.")
+        end
+        print message
         else
-            puts "Here are your current items"
+            text_box = TTY::Box.frame(width: 30, height: 3, border: :thick, align: :center) do
+            @@pastel.bold.yellow("Here are your current items")
+            end
+            print text_box
             uis = User.all.select {|user| user.game_id == self.id}.first.user_items
             uis.each {|ui| puts "#{ui.item.name}: #{ui.item.description}"}
         end
-        @@prompt.select("Go back to previous menu?") do |menu|
-            menu.choice "Back", -> { navigation_menu }
+        @@prompt.select(@@pastel.underline.yellow("Go back to previous menu?")) do |menu|
+            menu.choice @@pastel.underline.yellow("Back"), -> { navigation_menu }
         end
     end
 
 
     def view_spells
         if User.all.select {|user| user.game_id == self.id}.first.user_spells == []
-            puts "Sorry, you have no spells. Go back to add items/spells."
+            message = TTY::Box.frame(width: 30, height: 3, border: :thick, align: :center) do
+            @@pastel.bold.cyan("Sorry, you have no spells.")
+            end
+            print message
         else
-            puts "Here are your current spells"
+            text_box = TTY::Box.frame(width: 30, height: 3, border: :thick, align: :center) do 
+            @@pastel.bold.cyan("Here are your current spells")
+            end
+            print text_box
             us = User.all.select {|user| user.game_id == self.id}.first.user_spells
             us.each {|us| puts "#{us.spell.spell_name}: #{us.spell.effect_name}"}
         end
-        @@prompt.select("Go back to previous menu?") do |menu|
-            menu.choice "Back", -> {navigation_menu}
+        @@prompt.select(@@pastel.underline.cyan("Go back to previous menu?")) do |menu|
+            menu.choice @@pastel.underline.cyan("Back"), -> {navigation_menu}
         end
     end
 
     def update_items
-        result = @@prompt.select("Would you like to add or change items?") do |menu|
-            menu.choice "Add/Change", -> { self.user.change_items }
-            menu.choice "Back", -> { navigation_menu }
+        result = @@prompt.select(@@pastel.bold.yellow("Would you like to add or change items?")) do |menu|
+            menu.choice @@pastel.bold.yellow("Add/Change"), -> { self.user.change_items }
+            menu.choice @@pastel.underline.yellow("Back"), -> { navigation_menu }
         end
     end
 
     def update_spells
-        result = @@prompt.select("Would you like to add or change spells?") do |menu|
-            menu.choice "Add/Change", -> { self.user.change_spells }
-            menu.choice "Back", -> { navigation_menu }
+        result = @@prompt.select(@@pastel.bold.cyan("Would you like to add or change spells?")) do |menu|
+            menu.choice @@pastel.bold.cyan("Add/Change"), -> { self.user.change_spells }
+            menu.choice @@pastel.underline.cyan("Back"), -> { navigation_menu }
         end
     end
 
@@ -114,5 +130,19 @@ class Game < ActiveRecord::Base
         end
     end
 
-                
+
+#     def banner
+#         box = TTY::Box.frame(width:160, height:15, border: :thick, align: :center) do 
+#         "
+#         __          __         _                                       _               _    _                                             _           _ 
+#         \ \        / /        | |                                     | |             | |  | |                                           | |         | |
+#          \ \  /\  / /    ___  | |   ___    ___    _ __ ___     ___    | |_    ___     | |__| |   ___     __ _  __      __   __ _   _ __  | |_   ___  | |
+#           \ \/  \/ /    / _ \ | |  / __|  / _ \  | '_ ` _ \   / _ \   | __|  / _ \    |  __  |  / _ \   / _` | \ \ /\ / /  / _` | | '__| | __| / __| | |
+#            \  /\  /    |  __/ | | | (__  | (_) | | | | | | | |  __/   | |_  | (_) |   | |  | | | (_) | | (_| |  \ V  V /  | (_| | | |    | |_  \__ \ |_|
+#             \/  \/      \___| |_|  \___|  \___/  |_| |_| |_|  \___|    \__|  \___/    |_|  |_|  \___/   \__, |   \_/\_/    \__,_| |_|     \__| |___/ (_)
+#                                                                                                          __/ |                                          
+#                                                                                                         |___/                                           
+#        "end
+#        print box
+#     end     
 end

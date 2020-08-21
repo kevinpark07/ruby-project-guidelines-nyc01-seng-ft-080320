@@ -1,4 +1,9 @@
 require 'pry'
+require 'tty-prompt'
+require 'tty-box'
+require 'tty-font'
+require 'pastel'
+
 
 class User < ActiveRecord::Base
     has_many :user_scenarios
@@ -11,25 +16,35 @@ class User < ActiveRecord::Base
     belongs_to :game
 
     @@prompt = TTY::Prompt.new(active_color: :blue)
+    @@pastel = Pastel.new
 
     def self.existing_user(game)
-        username = @@prompt.ask("Please enter you username:")
+        username = @@prompt.ask(@@pastel.cyan("Please enter you username:"))
         exist_user = User.find_by(username: username)
         if exist_user != nil
-            password = @@prompt.mask("Please enter your password:")
+            password = @@prompt.mask(@@pastel.cyan("Please enter your password:"))
             count = 0
             while exist_user.password != password
-                puts "Wrong password. Please try again."
-                password = @@prompt.mask("Please enter your password:")
+                text_box = TTY::Box.frame(width: 40, height: 3, border: :thick, align: :center) do
+                @@pastel.bold.red("Wrong password. Please try again.")
+                end
+                print text_box
+                password = @@prompt.mask(@@pastel.cyan("Please enter your password:"))
                 count += 1
                 if count == 2
-                    puts "Sorry, account has been locked."
-                    start_menu(game)
+                    message = TTY::Box.frame(width: 40, height: 3, border: :thick, align: :center) do
+                    @@pastel.bold.red("Sorry, account has been locked.")
+                    end
+                    print message
+                    game.start_menu(game)
                 end
             end
         else
-            puts "#{username} not found"
-            #game.start_menu(game)
+            box = TTY::Box.frame(width: 20, height: 3, border: :thick, align: :center) do
+            @@pastel.red("#{username} not found")
+            end
+            print box
+            game.start_menu(game)
         end
         game.update(user: exist_user)
         exist_user
@@ -47,20 +62,26 @@ class User < ActiveRecord::Base
     end
 
     def self.create_username
-        username = @@prompt.ask("Please create a new Username:")
+        username = @@prompt.ask(@@pastel.green("Please create a new Username:"))
         if User.find_by(username: username) == nil
             username
         else username == User.find_by(username: username).username
-            puts "Username already exists."
+            text_box = TTY::Box.frame(width: 25, height: 3, border: :thick, align: :center) do
+                @@pastel.on_red("Username already exists.")
+            end
+            print text_box
             self.create_username
         end
     end
 
     def self.create_password
-        password = @@prompt.mask("Please enter a Password:")
-        password_check = @@prompt.mask("Please Re-enter Your Password:")
+        password = @@prompt.mask(@@pastel.green("Please enter a Password:"))
+        password_check = @@prompt.mask(@@pastel.green("Please Re-enter Your Password:"))
         if password_check != password
-            puts "We're sorry, but your passwords don't seem to match. Please try again"
+            box = TTY::Box.frame(width: 40, height: 4, border: :thick, align: :center) do
+                @@pastel.on_red("We're sorry, but your passwords don't seem to match. Please try again.")
+            end
+            print box
             self.create_password
         else
             password_check 
@@ -75,18 +96,21 @@ class User < ActiveRecord::Base
     end
 
     def add_house
-        puts "Hi #{self.name}! Interesting name. A few more questions..."
+        box = TTY::Box.frame(width: 40, height: 4, border: :thick, align: :center) do
+        @@pastel.underline.magenta("That's an interesting name... I have a few more questions...")
+        end
+        print box
         houses = %w[Gryffindor Slytherin Ravenclaw Hufflepuff]
-        house = @@prompt.select("What house do you belong to?", houses)
+        house = @@prompt.select(@@pastel.magenta("What house do you belong to?"), houses)
     end
 
     def add_blood
         bloods = %w[pure-blood half-blood muggle unkown]
-        blood = @@prompt.select("What is your blood type?", bloods)
+        blood = @@prompt.select(@@pastel.magenta("What is your blood type?"), bloods)
     end
 
     def add_name
-        name = @@prompt.ask("What is your name, young wizard?", echo: true)
+        name = @@prompt.ask(@@pastel.magenta("What is your name, young wizard?"), echo: true)
     end
 
     def spell_names

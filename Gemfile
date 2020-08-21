@@ -11,4 +11,4 @@ gem "tty-box"
 gem "rake"
 gem "pastel"
 gem "tty-font"
-gem "tty-color"
+
