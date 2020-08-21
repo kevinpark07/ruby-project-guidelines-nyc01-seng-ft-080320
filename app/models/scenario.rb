@@ -36,7 +36,6 @@ class Scenario < ActiveRecord::Base
         else
             score
         end
-        sleep()
         score
     end
 
