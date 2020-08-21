@@ -36,6 +36,7 @@ class Scenario < ActiveRecord::Base
         else
             score
         end
+        sleep()
         score
     end
 
@@ -52,14 +53,14 @@ class Scenario < ActiveRecord::Base
             @@pastel.bold.blue("I see you love your Curses. So do I!")
             end
             print message
-            sleep(2)
+            sleep(4)
             score += 1
         else
             box_text = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
             @@pastel.bold.blue("What a shame. We love Curses here at the Death Eater office.")
             end
             print box_text
-            sleep(2)
+            sleep(4)
             score
         end
         score
@@ -78,7 +79,7 @@ class Scenario < ActiveRecord::Base
             @@pastel.bold.blue("Ha! You liar! I applaud your chutz-pah")
             end
             print message
-            sleep(2)
+            sleep(4)
             score += 1
         elsif result == "Yes" && self.user.items.include?(butter)
             beer = self.user.user_items.find_by(item_id: butter.id)
@@ -87,14 +88,14 @@ class Scenario < ActiveRecord::Base
             @@pastel.bold.blue("I'll take that! You're too young anyways.")
             end
             print box_text
-            sleep(2)
+            sleep(4)
             score += 1
         else 
             text_box = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
             @@pastel.bold.blue("Bah! What a waste you are.")
             end
             print text_box
-            sleep(2)
+            sleep(4)
             score
         end
         score
@@ -113,21 +114,21 @@ class Scenario < ActiveRecord::Base
             @@pastel.bold.blue("Impressive, I have a good feeling about you.")
             end
             print text_box
-            sleep(2) 
+            sleep(4) 
             score += 1
         elsif result != self.user.house
             box_text = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
             @@pastel.bold.blue("You don't think I know you're lying! Unlike #{self.characters[2].name}, I HATE LIARS! You disgust me!")
             end
             print box_text
-            sleep(2)
+            sleep(4)
             score -= 1
         else
             message = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
             @@pastel.bold.blue("Yuck. We prefer Slytherins.")
             end
             print message
-            sleep(2)
+            sleep(4)
             score
         end
         score
@@ -142,18 +143,18 @@ class Scenario < ActiveRecord::Base
         choice = %w[Voldemort Dumbledore Potter Grindelwald]
         result = @@prompt.select(@@pastel.bold.underline.magenta("Who do you think is the greatest wizard of all time?"), choice)
         if result == "Voldemort" || result == "Grindelwald"
-            message = TTY::Box.frame(width: 50, height: 4, border: :thick, align: :center, padding: 1) do
+            message = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
             @@pastel.bold.blue("Hmmmmm... Excellent choice. But that was an easy question! Don't think I'm impressed.")
             end
             print message
-            sleep(2)
+            sleep(4)
             score += 1
         else
             text_box = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
             @@pastel.bold.blue("WHAT!? You must be joking! Do you know where you are right now? Get out of my face!")
             end
             print text_box
-            sleep(2)
+            sleep(4)
             score -=1
         end
         score
@@ -172,14 +173,14 @@ class Scenario < ActiveRecord::Base
             @@pastel.bold.blue("You might not be as weak as I thought. Maybe you would make a Death Eater.")
             end
             print message
-            sleep(2)
+            sleep(4)
             score +=1
         else
             text_box = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
             @@pastel.bold.blue("You're weak. I never expected much from you anyway.")
             end
             print text_box
-            sleep(2)
+            sleep(4)
             score
         end
         score

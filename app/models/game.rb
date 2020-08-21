@@ -57,7 +57,8 @@ class Game < ActiveRecord::Base
 
     def navigation_menu
         system ("clear")
-        @@prompt.select(@@pastel.bold.underline.blue("What do you want to do?")) do |menu|
+        @@prompt.select(@@pastel.bold.underline.blue("What do you want to do?"), per_page: 7) do |menu|
+            menu.choice @@pastel.white("User Profile"), -> { self.user.profile }
             menu.choice @@pastel.yellow("View Current Items"), -> { view_items }
             menu.choice @@pastel.yellow("Add/Change Items"), -> { update_items }
             menu.choice @@pastel.cyan("View Current Spells"), -> { view_spells }
@@ -158,7 +159,7 @@ class Game < ActiveRecord::Base
     def end_message
         system("clear")
         box = TTY::Box.frame(width: 50, height: 16, border: :thick, align: :center, padding: 2) do
-            @@pastel.bold.green("Thank you for joining us on this magical journey! We want to give thanks to the Harry Potter API at PotterAPI.com and TTY tool-kit by Piotr Murach. \n\nPlease play again in the future.\n\n\nCreated by: \nAnson Nickel and Kevin Park, 2020")
+            @@pastel.bold.green("Thank you for joining us on this magical journey! We want to give thanks to PotterAPI.com by Kristen Spencer and TTY tool-kit by Piotr Murach. \n\nPlease play again in the future.\n\n\nCreated by: \nAnson Nickel and Kevin Park, 2020")
         end
         print box
         sleep(7)

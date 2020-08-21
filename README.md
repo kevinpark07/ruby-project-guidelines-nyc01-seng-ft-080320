@@ -31,7 +31,7 @@ In your terminal, enter "ruby bin/run.rb" while in the project directory to ente
 
 Aesthetics enabled by the [TTY-toolkit](https://ttytoolkit.org/) and [Pastel](https://github.com/piotrmurach/pastel) gems written by Piotr Murach
 
-Harry Potter data provided by the [Harry Potter API](https://www.potterapi.com/)
+Harry Potter data provided by the [Harry Potter API](https://www.potterapi.com/), created Kristen Spencer
 
 ## Contributors
 

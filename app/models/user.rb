@@ -125,6 +125,17 @@ class User < ActiveRecord::Base
         self.items.map {|item| item.name}
     end
 
+    def profile
+        system("clear")
+        text_box = TTY::Box.frame(width: 40, height: 8, border: :thick, align: :center, padding: 1) do
+        @@pastel.bold.green("Username: #{self.username}\nName: #{self.name}\nBlood Status: #{self.bloodStatus}\nHouse: #{self.house}")
+        end
+        print text_box
+        @@prompt.select(@@pastel.bold.underline.blue("Go back to previous menu?")) do |menu|
+            menu.choice @@pastel.blue("Back"), -> { self.game.navigation_menu }
+        end
+    end
+
 
     def change_items
         system("clear")
