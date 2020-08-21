@@ -1,59 +1,38 @@
-# Module One Final Project Guidelines
+# Mod1 Final Project: Harry Potter: The Definitive RPG Experience
+Created by: Anson Nickel and Kevin Park, Flatiron School 2020
 
-Congratulations, you're at the end of module one! You've worked crazy hard to get here and have learned a ton.
+## Description
 
-For your final project, we'll be building a Command Line database application.
+Harry Potter: The Definitive Experience provides the framwework to participate in the world of Harry Potter. A user will be able to take on multiple scenarios, using multiple combinations of items and spells from the Harry Potter universe. Yes, Butter Beer plays a starring role. Using the open Harry Potter API, our app imports all of the Harry Potter characters with attributes such as name, house, blood-type, and even if they're members of the Death Eaters, Dumbledore's Army, etc.
 
-## Project Requirements
+In our app, a user will be able to:
 
-### Option One - Data Analytics Project
+1. Create an account with the game, using a username and password combo.
+2. Maintain that account through multiple play-throughs
+3. Learn new spells
+4. Acquire new items
+5. Continuously change and update your selections
+6. Try to successfully complete a chosen scenario
+7. Retry scenarios using different combinations of spells/items
 
-1. Access a Sqlite3 Database using ActiveRecord.
-2. You should have at minimum three models including one join model. This means you must have a many-to-many relationship.
-3. You should seed your database using data that you collect either from a CSV, a website by scraping, or an API.
-4. Your models should have methods that answer interesting questions about the data. For example, if you've collected info about movie reviews, what is the most popular movie? What movie has the most reviews?
-5. You should provide a CLI to display the return values of your interesting methods.  
-6. Use good OO design patterns. You should have separate classes for your models and CLI interface.
+This is a working proto-type and the hope is add the following functions:
 
-  **Resource:** [Easy Access APIs](https://github.com/learn-co-curriculum/easy-access-apis)
+1. More scenarios
+2. User can interact with the famous characters of Harry Potter prior to going on scenarios.
+3. Add more robust character building elements (a la traditional RPG games)
 
-### Option Two - Command Line CRUD App
+## Installation
 
-1. Access a Sqlite3 Database using ActiveRecord.
-2. You should have a minimum of three models.
-3. You should build out a CLI to give your user full CRUD ability for at least one of your resources. For example, build out a command line To-Do list. A user should be able to create a new to-do, see all todos, update a todo item, and delete a todo. Todos can be grouped into categories, so that a to-do has many categories and categories have many to-dos.
-4. Use good OO design patterns. You should have separate classes for your models and CLI interface.
+Installation is rather straight-forward. Clone this repo to your local machine and run 'bundle install' in the project directory.
 
-### Brainstorming and Proposing a Project Idea
+In your terminal, enter "ruby bin/run.rb" while in the project directory to enter the application.
 
-Projects need to be approved prior to launching into them, so take some time to brainstorm project options that will fulfill the requirements above.  You must have a minimum of four [user stories](https://en.wikipedia.org/wiki/User_story) to help explain how a user will interact with your app.  A user story should follow the general structure of `"As a <role>, I want <goal/desire> so that <benefit>"`. For example, if we were creating an app to randomly choose nearby restaurants on Yelp, we might write:
+## Credit to the Following Gems/APIs
 
-* As a user, I want to be able to enter my name to retrieve my records
-* As a user, I want to enter a location and be given a random nearby restaurant suggestion
-* As a user, I should be able to reject a suggestion and not see that restaurant suggestion again
-* As a user, I want to be able to save to and retrieve a list of favorite restaurant suggestions
+Aesthetics enabled by the [TTY-toolkit](https://ttytoolkit.org/) and [Pastel](https://github.com/piotrmurach/pastel) gems written by Piotr Murach
 
-## Instructions
+Harry Potter data provided by the [Harry Potter API](https://www.potterapi.com/)
 
-1. Fork and clone this repository.
-2. Build your application. Make sure to commit early and commit often. Commit messages should be meaningful (clearly describe what you're doing in the commit) and accurate (there should be nothing in the commit that doesn't match the description in the commit message). Good rule of thumb is to commit every 3-7 mins of actual coding time. Most of your commits should have under 15 lines of code and a 2 line commit is perfectly acceptable.
-3. Make sure to create a good README.md with a short description, install instructions, a contributor's guide and a link to the license for your code.
-4. Make sure your project checks off each of the above requirements.
-5. Prepare a video demo (narration helps!) describing how a user would interact with your working project.
-    * The video should:
-      - Have an overview of your project. (2 minutes max)
-6. Prepare a presentation to follow your video. (3 minutes max)
-    * Your presentation should:
-      - Describe something you struggled to build, and show us how you ultimately implemented it in your code.
-      - Discuss 3 things you learned in the process of working on this project.
-      - Address what, if anything, you would change or add to what you have today.
-      - Present any code you would like to highlight.   
-7. *OPTIONAL, BUT RECOMMENDED*: Write a blog post about the project and process.
+## Contributors
 
----
-### Common Questions:
-- How do I turn off my SQL logger?
-```ruby
-# in config/environment.rb add this line:
-ActiveRecord::Base.logger = nil
-```
+Anson and Kevin would love for comments and assistance in order to improve the project. Please send us a note on github to show support.

@@ -15,32 +15,46 @@ class Game < ActiveRecord::Base
     # @@font = TTY::Font.new(:starwars)
 
     def start
+        self.banner
+        self.intro_scene
+        self.start_menu(self)
+        self.user_welcome
+        self.navigation_menu
+    end
+
+    def banner
+        system("clear")
+        box = TTY::Box.frame(width: 50, height: 12, border: :thick, align: :center, padding: 2) do
+            @@pastel.bold.green("WELCOME TO HOGWARTS! \nTHE DEFINITIVE RPG EXPERIENCE\n\n\n Created by: \nAnson Nickel and Kevin Park, 2020")
+            end
+            print box
+            sleep(4)
+    end
+
+    def intro_scene
         system ("clear")
-        # banner
         box = TTY::Box.frame(width: 50, height: 8, border: :thick, align: :center, padding: 1) do
         @@pastel.bold.green("Hello, I am Professor Minerva McGonagall. There have been many curious and dangerous occurences in these halls.")
         end
         print box
-        system ("cls")
-        user = start_menu(self)
-        message = TTY::Box.frame(width: 30, height: 4, border: :thick, align: :center) do 
-        @@pastel.bold.white("Welcome #{self.user.name}! Let's explore.")
-        end
-        print message
-        navigation_menu
     end
 
     def start_menu(game)
-        #@@font name
         @@prompt.select(@@pastel.bold.underline.blue("Please Log into the system:"), per_page: 3) do |menu|
             menu.choice @@pastel.green("Create a New Log-in"), -> { User.new_user(game) }
             menu.choice @@pastel.cyan("Log-in"), -> { User.existing_user(game) }
-            menu.choice @@pastel.magenta("Exit"), -> { exit }
+            menu.choice @@pastel.red("Exit"), -> { end_message }
         end
     end
 
-    
-    
+    def user_welcome
+        message = TTY::Box.frame(width: 30, height: 4, border: :thick, align: :center) do 
+            @@pastel.bold.white("Welcome #{self.user.name}! Let's explore.")
+            end
+        print message
+        sleep(2)
+    end
+
     def navigation_menu
         system ("clear")
         @@prompt.select(@@pastel.bold.underline.blue("What do you want to do?")) do |menu|
@@ -49,17 +63,17 @@ class Game < ActiveRecord::Base
             menu.choice @@pastel.cyan("View Current Spells"), -> { view_spells }
             menu.choice @@pastel.cyan("Add/Change Spells"), -> { update_spells }
             menu.choice @@pastel.green("Choose Scenario"), -> { choose_scenario }
-            menu.choice @@pastel.red("Exit"), -> { exit }
+            menu.choice @@pastel.red("Exit"), -> { end_message }
         end
     end
 
     def view_items
         system ("clear")
         if  User.all.select {|user| user.game_id == self.id}.first.user_items == []
-        message = TTY::Box.frame(width: 30, height: 3, border: :thick, align: :center) do  
-        @@pastel.bold.yellow("Sorry, you have no items.")
-        end
-        print message
+            message = TTY::Box.frame(width: 30, height: 3, border: :thick, align: :center) do  
+            @@pastel.bold.yellow("Sorry, you have no items.")
+            end
+            print message
         else
             text_box = TTY::Box.frame(width: 30, height: 3, border: :thick, align: :center) do
             @@pastel.yellow("Here are your current items")
@@ -110,7 +124,6 @@ class Game < ActiveRecord::Base
         end
     end
 
-
     def choose_scenario
         system("clear")
         if self.user.is_ready?
@@ -142,19 +155,45 @@ class Game < ActiveRecord::Base
         end
     end
 
+    def end_message
+        system("clear")
+        box = TTY::Box.frame(width: 50, height: 16, border: :thick, align: :center, padding: 2) do
+            @@pastel.bold.green("Thank you for joining us on this magical journey! We want to give thanks to the Harry Potter API at PotterAPI.com and TTY tool-kit by Piotr Murach. \n\nPlease play again in the future.\n\n\nCreated by: \nAnson Nickel and Kevin Park, 2020")
+        end
+        print box
+        sleep(7)
+        system("clear")
+        exit
+    end
 
-#     def banner
-#         box = TTY::Box.frame(width:160, height:15, border: :thick, align: :center) do 
-#         "
-#         __          __         _                                       _               _    _                                             _           _ 
-#         \ \        / /        | |                                     | |             | |  | |                                           | |         | |
-#          \ \  /\  / /    ___  | |   ___    ___    _ __ ___     ___    | |_    ___     | |__| |   ___     __ _  __      __   __ _   _ __  | |_   ___  | |
-#           \ \/  \/ /    / _ \ | |  / __|  / _ \  | '_ ` _ \   / _ \   | __|  / _ \    |  __  |  / _ \   / _` | \ \ /\ / /  / _` | | '__| | __| / __| | |
-#            \  /\  /    |  __/ | | | (__  | (_) | | | | | | | |  __/   | |_  | (_) |   | |  | | | (_) | | (_| |  \ V  V /  | (_| | | |    | |_  \__ \ |_|
-#             \/  \/      \___| |_|  \___|  \___/  |_| |_| |_|  \___|    \__|  \___/    |_|  |_|  \___/   \__, |   \_/\_/    \__,_| |_|     \__| |___/ (_)
-#                                                                                                          __/ |                                          
-#                                                                                                         |___/                                           
-#        "end
-#        print box
-#     end     
 end
+
+
+
+
+
+    # def banner2
+    #    puts 
+    #    "
+            # MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+            # MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+            # MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+            # MMWWMMWWMWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+            # MMWWXOOXWWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWNWMMMM
+            # MMMNKOkkOOO0XNWWWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWWNXOOXMMMM
+            # MWWWX0OO0K0OOO0000KXXXXNNNWWWWNNNNNNWWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWWWWNX0kxdx0NMMMM
+            # MMMMMWX0OkkO00000000000KKKKKKKKKKKKK00K00KKKXNWWXNNNWMWNXNWWNNNNNWWWWWWWWNNWWNWNNXKK00Okdodk0XWMMMMM
+            # MMMMMMMMWNKOkdlodddxxxxkkkkkkkkkkkO00KXKK0kod0X0kkkO0KKKOOK00KKKXXXXXXXXXXKKKKKKK0OOkxxk0KNWMMMMMMMM
+            # MMMMMMMMWWWMWX0Oxoolccccccccc:;;c:cccodOK0kdkKKKK000KK0OlcxkOKXXXXXXXXXXXXXXXX00OkkkOKXWMMMMMMMMMMMM
+            # MMMMMMMMMMMMMMMMWXKkddcclcccccc:cc:::okOkkO0K00KX0Oxxkd:,:xOkk0XNNNNXXXXK00xdoodk0NWMMMMMMMMMMMMMMMM
+            # MMMMMMMMMMMMMMMMMMMMWNKKK0kxxxdddodk0NMXO0KKKXXX0kdl:::;;oONWXOkkkkkkxkkOOOO0KNWMMMMMMMMMMMMMMMMMMMM
+            # MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWWWWWMMMW0OKXNNWNNXXKO:..'ckOKMMMWNXXXNNNWWMMMMMMMMMMMMMMMMMMMMMMMMMMM
+            # MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWWMMMMW0O0KKXXXNXXXKxc;;okkKMWMWWMMMMMWWWWMMMMMMMMMMMMMMMMMMMMMMMMMM
+            # MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMN0kO00OOKXXKkc,.'lkKWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+            # MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMXkkkO0OO0koc'.'cd0NMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+            # MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWNKkkOxool::',lkXWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+            # MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWNKOkkxdxx0NWWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+            # MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+            # MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+    #         "
+    # end    
