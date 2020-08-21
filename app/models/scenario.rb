@@ -25,7 +25,7 @@ class Scenario < ActiveRecord::Base
 
     def question_one(score)
         system("clear")
-        box = TTY::Box.frame(width: 45, height: 4, border: :thick, align: :center) do
+        box = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center) do
         @@pastel.bold.green("As you enter the Death Eater office, you spot #{self.characters[0].name} in a dark corner.")
         end
         print box 
@@ -41,23 +41,25 @@ class Scenario < ActiveRecord::Base
 
     def question_two(score)
         system("clear")
-        box = TTY::Box.frame(width: 40, height: 4, border: :thick, align: :center) do
+        box = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
         @@pastel.bold.green("After appeasing #{self.characters[0].name}, you shiver as you pass by #{self.characters[1].name}.")
         end
         print box
         choice = self.users[0].spells.map {|spell| spell.spell_name}
-        result = @@prompt.select(@@pastel.bold.underline.magenta("#{self.characters[1].name} asks: Hello #{self.users[0].name}! Which of the spells that you've learned would you use against an opponent?"), choice)
+        result = @@prompt.select(@@pastel.bold.underline.magenta("#{self.characters[1].name} asks: Hello #{self.users[0].name}! Which of the spells that you've learned \nwould you use against an opponent?"), choice)
         if Spell.find_by(spell_name: result).category == "Curse"
-            message = TTY::Box.frame(width: 30, height: 3, border: :thick, align: :center) do
-            @@pastel.bold.on_blue("I see you love your Curses. So do I!")
+            message = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
+            @@pastel.bold.blue("I see you love your Curses. So do I!")
             end
             print message
+            sleep(2)
             score += 1
         else
-            box_text = TTY::Box.frame(width: 40, height: 4, border: :thick, align: :center) do
-            @@pastel.bold.on_blue("What a shame. We love Curses here at the Death Eater office.")
+            box_text = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
+            @@pastel.bold.blue("What a shame. We love Curses here at the Death Eater office.")
             end
             print box_text
+            sleep(2)
             score
         end
         score
@@ -65,31 +67,34 @@ class Scenario < ActiveRecord::Base
 
     def question_three(score)
         system("clear")
-        box = TTY::Box.frame(width: 40, height: 4, border: :thick, align: :center) do
+        box = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
         @@pastel.bold.green("#{self.characters[2].name} sees you walking down the hall and gives you a strange look.")
         end
         print box
-        result = @@prompt.select(@@pastel.bold.underline.magenta("Hey kid! You got any beverages for me? All this Death Eating has made me mighty thirsty."), %w[Yes No])
+        result = @@prompt.select(@@pastel.bold.underline.magenta("Hey kid! You got any beverages for me? All this Death \nEating has made me mighty thirsty."), %w[Yes No])
         butter = Item.find_by_name("Butter Beer")
         if result == "Yes" && !self.user.items.include?(butter)
-            message = TTY::Box.frame(width: 40, height: 3, border: :thick, align: :center) do
-            @@pastel.on_blue("Ha! You liar! I applaud your chutz-pah")
+            message = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
+            @@pastel.bold.blue("Ha! You liar! I applaud your chutz-pah")
             end
             print message
+            sleep(2)
             score += 1
         elsif result == "Yes" && self.user.items.include?(butter)
             beer = self.user.user_items.find_by(item_id: butter.id)
             beer.destroy
-            box_text = TTY::Box.frame(width: 40, height: 4, border: :thick, align: :center) do
-            @@pastel.on_blue("I'll take that! You're too young anyways.")
+            box_text = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
+            @@pastel.bold.blue("I'll take that! You're too young anyways.")
             end
             print box_text
+            sleep(2)
             score += 1
         else 
-            text_box = TTY::Box.frame(width: 30, height: 3, border: :thick, align: :center) do
-            @@pastel.on_blue("Bah! What a waste you are.")
+            text_box = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
+            @@pastel.bold.blue("Bah! What a waste you are.")
             end
             print text_box
+            sleep(2)
             score
         end
         score
@@ -97,29 +102,32 @@ class Scenario < ActiveRecord::Base
 
     def question_four(score)
         system("clear")
-        box = TTY::Box.frame(width: 40, height: 3, border: :thick, align: :center) do
+        box = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
         @@pastel.bold.green("#{self.characters[3].name} glares at you and with a snarl asks:")
         end
         print box
         choice = %w[Gryffindor Ravenclaw Slytherin Hufflepuff]
         result = @@prompt.select(@@pastel.bold.underline.magenta( "What house are you in anyway?"), choice)
         if result == self.user.house && result == "Slytherin"
-            text_box = TTY::Box.frame(width: 40, height: 4, border: :thick, align: :center) do
-            @@pastel.on_blue("Impressive, I have a good feeling about you.")
+            text_box = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
+            @@pastel.bold.blue("Impressive, I have a good feeling about you.")
             end
-            print text_box 
+            print text_box
+            sleep(2) 
             score += 1
         elsif result != self.user.house
-            box_text = TTY::Box.frame(width: 45, height: 5, border: :thick, align: :center) do
-            @@pastel.on_blue("You don't think I know you're lying! Unlike #{self.characters[2].name}, I HATE LIARS! You disgust me!")
+            box_text = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
+            @@pastel.bold.blue("You don't think I know you're lying! Unlike #{self.characters[2].name}, I HATE LIARS! You disgust me!")
             end
             print box_text
+            sleep(2)
             score -= 1
         else
-            message = TTY::Box.frame(width: 30, height: 3, border: :thick, align: :center) do
-            @@pastel.on_blue("Yuck. We prefer Slytherins.")
+            message = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
+            @@pastel.bold.blue("Yuck. We prefer Slytherins.")
             end
             print message
+            sleep(2)
             score
         end
         score
@@ -127,23 +135,25 @@ class Scenario < ActiveRecord::Base
 
     def question_five(score)
         system("clear")
-        box = TTY::Box.frame(width: 40, height: 4, border: :thick, align: :center) do
+        box = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
         @@pastel.bold.green("You run to use the bathroom when #{self.characters[4].name} sees you and asks:")
         end
         print box 
         choice = %w[Voldemort Dumbledore Potter Grindelwald]
         result = @@prompt.select(@@pastel.bold.underline.magenta("Who do you think is the greatest wizard of all time?"), choice)
         if result == "Voldemort" || result == "Grindelwald"
-            message = TTY::Box.frame(width: 50, height: 4, border: :thick, align: :center) do
-            @@pastel.on_blue("Hmmmmm... Excellent choice. But that was an easy question! Don't think I'm impressed.")
+            message = TTY::Box.frame(width: 50, height: 4, border: :thick, align: :center, padding: 1) do
+            @@pastel.bold.blue("Hmmmmm... Excellent choice. But that was an easy question! Don't think I'm impressed.")
             end
             print message
+            sleep(2)
             score += 1
         else
-            text_box = TTY::Box.frame(width: 50, height: 4, border: :thick, align: :center) do
-            @@pastel.on_blue("WHAT!? You must be joking! Do you know where you are right now? Get out of my face!")
+            text_box = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
+            @@pastel.bold.blue("WHAT!? You must be joking! Do you know where you are right now? Get out of my face!")
             end
             print text_box
+            sleep(2)
             score -=1
         end
         score
@@ -151,23 +161,25 @@ class Scenario < ActiveRecord::Base
 
     def question_six(score)
         system ("clear")
-        box = TTY::Box.frame(width: 50, height: 4, border: :thick, align: :center) do
+        box = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
         @@pastel.bold.green("As you exit the bathroom, #{self.characters[5].name} is standing right ouside waiting for you.")
         end
         print box 
         choice = %w[Accept Decline]
-        result = @@prompt.select(@@pastel.bold.underline.magenta("Hey kid, why don't you and I have a quick duel? It could be funnnn... Don't be scared."), choice)
+        result = @@prompt.select(@@pastel.bold.underline.magenta("Hey kid, why don't you and I have a quick duel? \nIt could be funnnn... Don't be scared."), choice)
         if result == "Accept"
-            message = TTY::Box.frame(width: 45, height: 4, border: :thick, align: :center) do
-            @@pastel.on_blue("You might not be as weak as I thought. Maybe you would make a Death Eater.")
+            message = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
+            @@pastel.bold.blue("You might not be as weak as I thought. Maybe you would make a Death Eater.")
             end
             print message
+            sleep(2)
             score +=1
         else
-            text_box = TTY::Box.frame(width: 40, height: 4, border: :thick, align: :center) do
-            @@pastel.on_blue("You're weak. I never expected much from you anyway.")
+            text_box = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
+            @@pastel.bold.blue("You're weak. I never expected much from you anyway.")
             end
             print text_box
+            sleep(2)
             score
         end
         score
@@ -180,18 +192,19 @@ class Scenario < ActiveRecord::Base
         else
             you_lost
         end
+        sleep(5)
         self.user.game.navigation_menu
     end
 
     def you_won
-        box = TTY::Box.frame(width: 55, height: 4, border: :thick, align: :center) do
+        box = TTY::Box.frame(width: 50, height: 10, border: :thick, align: :center, padding: 1) do
         @@pastel.bold.cyan("Voldemort comes out from his office and gives you a nice warm hug. Welcome #{self.user.name} to the Death Eaters!")
         end
         print box
     end
 
     def you_lost
-        box = TTY::Box.frame(width: 50, height: 5, border: :thick, align: :center) do
+        box = TTY::Box.frame(width: 50, height: 10, border: :thick, align: :center, padding: 1) do
         @@pastel.bold.cyan("Voldemort's assistant walks up to you and requests that you leave the premises. Sorry, you did not become a Death Eater.")
         end
         print box
@@ -201,12 +214,13 @@ class Scenario < ActiveRecord::Base
          UserScenario.all.where("scenario_id = ?", self.id).first.user
     end
     
-    def next_question
-        system ("clear")
-        box = TTY::Box.frame(width: 40, height: 3, border: :thick, align: :center) do
-        @@pastel.bold.red("Next Questions!")
-        end
-        print box
-    end
+    #not used...yet
+    # def next_question
+    #     system ("clear")
+    #     box = TTY::Box.frame(width: 50, height: 6, border: :thick, align: :center, padding: 1) do
+    #     @@pastel.bold.red("Next Question!")
+    #     end
+    #     print box
+    # end
 
 end

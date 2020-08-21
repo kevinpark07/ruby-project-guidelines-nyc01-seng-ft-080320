@@ -32,7 +32,7 @@ class Game < ActiveRecord::Base
 
     def start_menu(game)
         #@@font name
-        @@prompt.select(@@pastel.bold.on_blue("Please Log into the system:"), per_page: 3) do |menu|
+        @@prompt.select(@@pastel.bold.underline.blue("Please Log into the system:"), per_page: 3) do |menu|
             menu.choice @@pastel.green("Create a New Log-in"), -> { User.new_user(game) }
             menu.choice @@pastel.cyan("Log-in"), -> { User.existing_user(game) }
             menu.choice @@pastel.magenta("Exit"), -> { exit }
@@ -42,10 +42,11 @@ class Game < ActiveRecord::Base
     
     
     def navigation_menu
-        @@prompt.select(@@pastel.bold.underline.white("What do you want to do?")) do |menu|
+        system ("clear")
+        @@prompt.select(@@pastel.bold.underline.blue("What do you want to do?")) do |menu|
             menu.choice @@pastel.yellow("View Current Items"), -> { view_items }
-            menu.choice @@pastel.cyan("View Current Spells"), -> { view_spells }
             menu.choice @@pastel.yellow("Add/Change Items"), -> { update_items }
+            menu.choice @@pastel.cyan("View Current Spells"), -> { view_spells }
             menu.choice @@pastel.cyan("Add/Change Spells"), -> { update_spells }
             menu.choice @@pastel.green("Choose Scenario"), -> { choose_scenario }
             menu.choice @@pastel.red("Exit"), -> { exit }
@@ -54,8 +55,6 @@ class Game < ActiveRecord::Base
 
     def view_items
         system ("clear")
-        # item_box = TTY::Box.frame
-        #Show box full of items or box with msg saying "Sorry!"
         if  User.all.select {|user| user.game_id == self.id}.first.user_items == []
         message = TTY::Box.frame(width: 30, height: 3, border: :thick, align: :center) do  
         @@pastel.bold.yellow("Sorry, you have no items.")
@@ -63,13 +62,13 @@ class Game < ActiveRecord::Base
         print message
         else
             text_box = TTY::Box.frame(width: 30, height: 3, border: :thick, align: :center) do
-            @@pastel.bold.yellow("Here are your current items")
+            @@pastel.yellow("Here are your current items")
             end
             print text_box
             uis = User.all.select {|user| user.game_id == self.id}.first.user_items
-            uis.each {|ui| puts "#{ui.item.name}: #{ui.item.description}"}
+            uis.each {|ui| puts @@pastel.yellow("#{ui.item.name}: #{ui.item.description}")}
         end
-        @@prompt.select(@@pastel.underline.yellow("Go back to previous menu?")) do |menu|
+        @@prompt.select(@@pastel.bold.underline.blue("Go back to previous menu?")) do |menu|
             menu.choice @@pastel.underline.yellow("Back"), -> { navigation_menu }
         end
     end
@@ -84,44 +83,53 @@ class Game < ActiveRecord::Base
             print message
         else
             text_box = TTY::Box.frame(width: 30, height: 3, border: :thick, align: :center) do 
-            @@pastel.bold.cyan("Here are your current spells")
+            @@pastel.cyan("Here are your current spells")
             end
             print text_box
             us = User.all.select {|user| user.game_id == self.id}.first.user_spells
-            us.each {|us| puts "#{us.spell.spell_name}: #{us.spell.effect_name}"}
+            us.each {|us| puts @@pastel.cyan("#{us.spell.spell_name}: #{us.spell.effect_name}")}
         end
-        @@prompt.select(@@pastel.underline.cyan("Go back to previous menu?")) do |menu|
-            menu.choice @@pastel.underline.cyan("Back"), -> {navigation_menu}
+        @@prompt.select(@@pastel.bold.underline.blue("Go back to previous menu?")) do |menu|
+            menu.choice @@pastel.white("Back"), -> {navigation_menu}
         end
     end
 
     def update_items
         system ("clear")
-        result = @@prompt.select(@@pastel.bold.yellow("Would you like to add or change items?")) do |menu|
-            menu.choice @@pastel.bold.yellow("Add/Change"), -> { self.user.change_items }
-            menu.choice @@pastel.underline.yellow("Back"), -> { navigation_menu }
+        result = @@prompt.select(@@pastel.bold.underline.blue("Would you like to add or change items?")) do |menu|
+            menu.choice @@pastel.yellow("Add/Change"), -> { self.user.change_items }
+            menu.choice @@pastel.yellow("Back"), -> { navigation_menu }
         end
     end
 
     def update_spells
         system ("clear")
-        result = @@prompt.select(@@pastel.bold.cyan("Would you like to add or change spells?")) do |menu|
-            menu.choice @@pastel.bold.cyan("Add/Change"), -> { self.user.change_spells }
-            menu.choice @@pastel.underline.cyan("Back"), -> { navigation_menu }
+        result = @@prompt.select(@@pastel.bold.underline.blue("Would you like to add or change spells?")) do |menu|
+            menu.choice @@pastel.cyan("Add/Change"), -> { self.user.change_spells }
+            menu.choice @@pastel.cyan("Back"), -> { navigation_menu }
         end
     end
 
 
     def choose_scenario
         system("clear")
-        scenarios = [
-            "Join the Death Eaters!", 
-            {name: "Fight the Death Eaters!", disabled: "(not ready yet!)"},
-            {name: "Find the Sorceror's Stone", disabled: "(not ready yet!)"}
-        ]
-        scenario_choice = @@prompt.select("Which challenge would you like to take?", scenarios)
-        choice = scenario_choice
-        start_scenario(choice)
+        if self.user.is_ready?
+            scenarios = [
+                "Join the Death Eaters!", 
+                {name: "Fight the Death Eaters!", disabled: "(not ready yet!)"},
+                {name: "Find the Sorceror's Stone", disabled: "(not ready yet!)"}
+            ]
+            scenario_choice = @@prompt.select(@@pastel.bold.underline.blue("Which challenge would you like to take?"), scenarios)
+            choice = scenario_choice
+            start_scenario(choice)
+        else
+            box = TTY::Box.frame(width: 50, height: 4, border: :thick, align: :center) do
+            @@pastel.bold.red("Please select items and spells before embarking on a scenario!")
+            end
+            print box 
+            sleep(2)
+            self.navigation_menu
+        end
     end
 
     def start_scenario(choice)

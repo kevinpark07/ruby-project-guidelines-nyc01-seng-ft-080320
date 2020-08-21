@@ -100,7 +100,7 @@ class User < ActiveRecord::Base
     def add_house
         system ("clear")
         box = TTY::Box.frame(width: 40, height: 4, border: :thick, align: :center) do
-        @@pastel.underline.magenta("That's an interesting name... I have a few more questions...")
+        @@pastel.magenta("That's an interesting name... I have a few more questions...")
         end
         print box
         houses = %w[Gryffindor Slytherin Ravenclaw Hufflepuff]
@@ -130,7 +130,7 @@ class User < ActiveRecord::Base
         system("clear")
         UserItem.all.where("user_id = ?", self.id).destroy_all
         items = ["Nimbus 2000", "Invisibility Cloak", "Slightly Dull Sword", "Butter Beer", "Marauder's Map", "Port Key"]
-        item_choices = @@prompt.multi_select("Here are some useful items. Please choose two.", items, min: 2, max: 2)
+        item_choices = @@prompt.multi_select(@@pastel.bold.underline.blue("Here are some useful items. Please choose two."), items, min: 2, max: 2)
         item_choices.count < 2 ? change_items : item_choices
         get_ready_items(item_choices)
     end
@@ -139,7 +139,7 @@ class User < ActiveRecord::Base
         system("clear")
         UserSpell.all.where("user_id = ?", self.id).destroy_all
         spells = %w[Aguamenti Confringo Confundus Imperio Expelliarmus Crucio]
-        spell_choices = @@prompt.multi_select("Would you like to learn some spells?. Here, let me teach two", spells, min: 2, max: 2)
+        spell_choices = @@prompt.multi_select(@@pastel.bold.underline.blue("Would you like to learn some spells?. Here, let me teach two"), spells, min: 2, max: 2)
         spell_choices.count < 2 ? change_spells : spell_choices
         get_ready_spells(spell_choices)
     end
@@ -158,6 +158,16 @@ class User < ActiveRecord::Base
         UserSpell.create(user_id: self.id, spell_id: spell_one_id)
         UserSpell.create(user_id: self.id, spell_id: spell_two_id)
         self.game.navigation_menu
+    end
+
+    def is_ready?
+        ui_count = UserItem.all.select{|ui| ui.user_id == self.id}.count
+        si_count = UserItem.all.select{|si| si.user_id == self.id}.count
+        if ui_count == 2 && si_count == 2
+            true
+        else 
+            false
+        end
     end
 
 end
