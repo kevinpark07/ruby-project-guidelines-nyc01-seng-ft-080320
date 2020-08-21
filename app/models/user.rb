@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
     @@pastel = Pastel.new
 
     def self.existing_user(game)
+        system ("clear")
         username = @@prompt.ask(@@pastel.cyan("Please enter you username:"))
         exist_user = User.find_by(username: username)
         if exist_user != nil
@@ -89,6 +90,7 @@ class User < ActiveRecord::Base
     end
 
     def user_info
+        system("clear")
         name = self.add_name
         house = self.add_house
         blood = self.add_blood
@@ -96,6 +98,7 @@ class User < ActiveRecord::Base
     end
 
     def add_house
+        system ("clear")
         box = TTY::Box.frame(width: 40, height: 4, border: :thick, align: :center) do
         @@pastel.underline.magenta("That's an interesting name... I have a few more questions...")
         end
@@ -105,6 +108,7 @@ class User < ActiveRecord::Base
     end
 
     def add_blood
+        system ("clear")
         bloods = %w[pure-blood half-blood muggle unkown]
         blood = @@prompt.select(@@pastel.magenta("What is your blood type?"), bloods)
     end

@@ -15,14 +15,15 @@ class Game < ActiveRecord::Base
     # @@font = TTY::Font.new(:starwars)
 
     def start
-        system("clear")
+        system ("clear")
         # banner
         box = TTY::Box.frame(width: 50, height: 8, border: :thick, align: :center, padding: 1) do
         @@pastel.bold.green("Hello, I am Professor Minerva McGonagall. There have been many curious and dangerous occurences in these halls.")
         end
         print box
+        system ("cls")
         user = start_menu(self)
-        message = TTY::Box.frame(width: 30, height: 5, border: :thick, align: :center, padding: 1) do 
+        message = TTY::Box.frame(width: 30, height: 4, border: :thick, align: :center) do 
         @@pastel.bold.white("Welcome #{self.user.name}! Let's explore.")
         end
         print message
@@ -41,7 +42,6 @@ class Game < ActiveRecord::Base
     
     
     def navigation_menu
-        #@@font name
         @@prompt.select(@@pastel.bold.underline.white("What do you want to do?")) do |menu|
             menu.choice @@pastel.yellow("View Current Items"), -> { view_items }
             menu.choice @@pastel.cyan("View Current Spells"), -> { view_spells }
@@ -53,6 +53,7 @@ class Game < ActiveRecord::Base
     end
 
     def view_items
+        system ("clear")
         # item_box = TTY::Box.frame
         #Show box full of items or box with msg saying "Sorry!"
         if  User.all.select {|user| user.game_id == self.id}.first.user_items == []
@@ -75,6 +76,7 @@ class Game < ActiveRecord::Base
 
 
     def view_spells
+        system ("clear")
         if User.all.select {|user| user.game_id == self.id}.first.user_spells == []
             message = TTY::Box.frame(width: 30, height: 3, border: :thick, align: :center) do
             @@pastel.bold.cyan("Sorry, you have no spells.")
@@ -94,6 +96,7 @@ class Game < ActiveRecord::Base
     end
 
     def update_items
+        system ("clear")
         result = @@prompt.select(@@pastel.bold.yellow("Would you like to add or change items?")) do |menu|
             menu.choice @@pastel.bold.yellow("Add/Change"), -> { self.user.change_items }
             menu.choice @@pastel.underline.yellow("Back"), -> { navigation_menu }
@@ -101,6 +104,7 @@ class Game < ActiveRecord::Base
     end
 
     def update_spells
+        system ("clear")
         result = @@prompt.select(@@pastel.bold.cyan("Would you like to add or change spells?")) do |menu|
             menu.choice @@pastel.bold.cyan("Add/Change"), -> { self.user.change_spells }
             menu.choice @@pastel.underline.cyan("Back"), -> { navigation_menu }

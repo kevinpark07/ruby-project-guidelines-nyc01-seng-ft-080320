@@ -24,7 +24,7 @@ class Scenario < ActiveRecord::Base
     end
 
     def question_one(score)
-        # system("clear")
+        system("clear")
         box = TTY::Box.frame(width: 45, height: 4, border: :thick, align: :center) do
         @@pastel.bold.green("As you enter the Death Eater office, you spot #{self.characters[0].name} in a dark corner.")
         end
@@ -40,7 +40,7 @@ class Scenario < ActiveRecord::Base
     end
 
     def question_two(score)
-        # system("clear")
+        system("clear")
         box = TTY::Box.frame(width: 40, height: 4, border: :thick, align: :center) do
         @@pastel.bold.green("After appeasing #{self.characters[0].name}, you shiver as you pass by #{self.characters[1].name}.")
         end
@@ -61,11 +61,10 @@ class Scenario < ActiveRecord::Base
             score
         end
         score
-        
     end
 
     def question_three(score)
-        # system("clear")
+        system("clear")
         box = TTY::Box.frame(width: 40, height: 4, border: :thick, align: :center) do
         @@pastel.bold.green("#{self.characters[2].name} sees you walking down the hall and gives you a strange look.")
         end
@@ -97,7 +96,7 @@ class Scenario < ActiveRecord::Base
     end
 
     def question_four(score)
-        # system("clear")
+        system("clear")
         box = TTY::Box.frame(width: 40, height: 3, border: :thick, align: :center) do
         @@pastel.bold.green("#{self.characters[3].name} glares at you and with a snarl asks:")
         end
@@ -127,7 +126,7 @@ class Scenario < ActiveRecord::Base
     end
 
     def question_five(score)
-        # system("clear")
+        system("clear")
         box = TTY::Box.frame(width: 40, height: 4, border: :thick, align: :center) do
         @@pastel.bold.green("You run to use the bathroom when #{self.characters[4].name} sees you and asks:")
         end
@@ -151,7 +150,7 @@ class Scenario < ActiveRecord::Base
     end
 
     def question_six(score)
-        # system("clear")
+        system ("clear")
         box = TTY::Box.frame(width: 50, height: 4, border: :thick, align: :center) do
         @@pastel.bold.green("As you exit the bathroom, #{self.characters[5].name} is standing right ouside waiting for you.")
         end
@@ -175,6 +174,7 @@ class Scenario < ActiveRecord::Base
     end
 
     def win?(score)
+        system ("clear")
         if score > 4
             you_won
         else
@@ -201,5 +201,12 @@ class Scenario < ActiveRecord::Base
          UserScenario.all.where("scenario_id = ?", self.id).first.user
     end
     
+    def next_question
+        system ("clear")
+        box = TTY::Box.frame(width: 40, height: 3, border: :thick, align: :center) do
+        @@pastel.bold.red("Next Questions!")
+        end
+        print box
+    end
 
 end
